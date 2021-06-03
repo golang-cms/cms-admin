@@ -7,6 +7,7 @@ import "./styles.css";
 const AdminComponent = lazy(() => import("./admin/moudles/Main"));
 const LandingComponent = lazy(() => import("./landing/moudles/Main"));
 
+
 const app = () => {
   return (
     <BrowserRouter>
