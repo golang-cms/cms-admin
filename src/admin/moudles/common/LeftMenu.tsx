@@ -1,8 +1,8 @@
 import { Divider, Drawer, IconButton, List, makeStyles } from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
-import { useContext, useState } from "react";
-import { LeftMenuContext, drawerWidth } from "../Main";
+import { useContext } from "react";
+import { drawerWidth, LeftMenuContext } from "../Main";
 
 const useStyles = makeStyles((theme) => ({
   toolbarIcon: {
@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 const LeftMenu = () => {
   const classes = useStyles();
-  // const [open, setOpen] = useState(true);
  
   const [leftMenuOpenContext, setLeftMenuOpenContext] = useContext(LeftMenuContext);
   const handleDrawerClose = () => {
