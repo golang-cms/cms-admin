@@ -1,0 +1,2 @@
+(this["webpackJsonpcms-admin"]=this["webpackJsonpcms-admin"]||[]).push([[5],{131:function(n,c,i){"use strict";i.r(c);var s=i(5);c.default=function(){return Object(s.jsx)("div",{children:Object(s.jsx)("h2",{children:"Landing Page"})})}}}]);
+//# sourceMappingURL=5.14f4e1bc.chunk.js.map
