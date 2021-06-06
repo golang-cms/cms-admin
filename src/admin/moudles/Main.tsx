@@ -10,9 +10,13 @@ import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import clsx from "clsx";
-import React, { createContext, useState } from "react";
-import Copyright from "./common/CopyRight";
-import LeftMenu from "./common/LeftMenu";
+import React, { useContext } from "react";
+import Copyright from "./common/component/CopyRight";
+import LeftMenu from "./common/component/LeftMenu";
+import {
+    ToggleContext,
+    ToggleProvider
+} from "./common/provider/ToggleProvider";
 import Routes from "./Routes";
 
 export const drawerWidth = 240;
@@ -96,61 +100,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const LeftMenuContext = createContext<
-  [boolean, (open: boolean) => void]
->([true, () => {}]);
-
 const Main = () => {
   const classes = useStyles();
-  const [leftMenuOpenContext, setLeftMenuOpenContext] = useState(true);
-  const handleDrawerOpen = () => {
-    setLeftMenuOpenContext(true);
-  };
-
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <LeftMenuContext.Provider
-        value={[leftMenuOpenContext, setLeftMenuOpenContext]}
-      >
-        <AppBar
-          position="absolute"
-          className={clsx(
-            classes.appBar,
-            leftMenuOpenContext && classes.appBarShift
-          )}
-        >
-          <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              className={clsx(
-                classes.menuButton,
-                leftMenuOpenContext && classes.menuButtonHidden
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+      <ToggleProvider>
+        <TopBar />
         <LeftMenu />
-      </LeftMenuContext.Provider>
+      </ToggleProvider>
 
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -163,6 +121,49 @@ const Main = () => {
         </Container>
       </main>
     </div>
+  );
+};
+
+const TopBar = () => {
+  const classes = useStyles();
+  const [toggle, setToggle] = useContext(ToggleContext);
+  const handleDrawerOpen = () => {
+    setToggle(true);
+  };
+  return (
+    <AppBar
+      position="absolute"
+      className={clsx(classes.appBar, toggle && classes.appBarShift)}
+    >
+      <Toolbar className={classes.toolbar}>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          className={clsx(
+            classes.menuButton,
+            toggle && classes.menuButtonHidden
+          )}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          component="h1"
+          variant="h6"
+          color="inherit"
+          noWrap
+          className={classes.title}
+        >
+          Dashboard
+        </Typography>
+        <IconButton color="inherit">
+          <Badge badgeContent={4} color="secondary">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   );
 };
 

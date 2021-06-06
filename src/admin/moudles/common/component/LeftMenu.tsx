@@ -9,8 +9,9 @@ import PagesIcon from '@material-ui/icons/Pages';
 import clsx from 'clsx';
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { drawerWidth, LeftMenuContext } from "../Main";
-import { AdminBasePath } from "../Routes";
+import { drawerWidth } from "../../Main";
+import { AdminBasePath } from "../../Routes";
+import { ToggleContext } from "../provider/ToggleProvider";
 
 const useStyles = makeStyles((theme) => ({
   toolbarIcon: {
@@ -52,18 +53,18 @@ const useStyles = makeStyles((theme) => ({
 const LeftMenu = () => {
   const classes = useStyles();
  
-  const [leftMenuOpenContext, setLeftMenuOpenContext] = useContext(LeftMenuContext);
+  const [toggle, setToggle] = useContext(ToggleContext);
   const handleDrawerClose = () => {
-    setLeftMenuOpenContext(false);
+    setToggle(false);
   };
 
   return (
     <Drawer
       variant="permanent"
       classes={{
-        paper: clsx(classes.drawerPaper, !leftMenuOpenContext && classes.drawerPaperClose),
+        paper: clsx(classes.drawerPaper, !toggle && classes.drawerPaperClose),
       }}
-      open={leftMenuOpenContext}
+      open={toggle}
     >
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerClose}>
