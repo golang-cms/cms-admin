@@ -7,6 +7,7 @@ import "./styles.css";
 const AdminComponent = lazy(() => import("./admin/moudles/Main"));
 const LandingComponent = lazy(() => import("./landing/moudles/Main"));
 
+export const BasePath = "/cms-admin";
 
 const app = () => {
   return (
@@ -17,7 +18,7 @@ const app = () => {
         {/* <Pace color={theme.palette.primary.light} /> */}
         <Suspense fallback={<Fragment />}>
           <Switch>
-            <Route path="/admin">
+            <Route path={BasePath + "/admin"}>
               <AdminComponent />
             </Route>
             <Route>

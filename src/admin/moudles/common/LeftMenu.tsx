@@ -1,8 +1,16 @@
-import { Divider, Drawer, IconButton, List, makeStyles } from "@material-ui/core";
+import { Divider, Drawer, IconButton, makeStyles } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import PagesIcon from '@material-ui/icons/Pages';
 import clsx from 'clsx';
-import { useContext } from "react";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { drawerWidth, LeftMenuContext } from "../Main";
+import { AdminBasePath } from "../Routes";
 
 const useStyles = makeStyles((theme) => ({
   toolbarIcon: {
@@ -63,11 +71,27 @@ const LeftMenu = () => {
         </IconButton>
       </div>
       <Divider />
-      <List></List>
+      <List>{mainListItems}</List>
       <Divider />
       <List></List>
     </Drawer>
   );
 };
 
+const mainListItems = (
+    <div>
+      <ListItem button component={Link} to={AdminBasePath}>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button component={Link} to={AdminBasePath + "/post"} >
+        <ListItemIcon>
+          <PagesIcon />
+        </ListItemIcon>
+        <ListItemText primary="Post" />
+      </ListItem>
+    </div>
+);
 export default LeftMenu;
