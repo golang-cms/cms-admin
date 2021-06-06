@@ -11,12 +11,12 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import clsx from "clsx";
 import React, { useContext } from "react";
-import Copyright from "./common/component/CopyRight";
-import LeftMenu from "./common/component/LeftMenu";
+import Copyright from "./common/components/CopyRight";
+import LeftMenu from "./common/components/LeftMenu";
 import {
     ToggleContext,
     ToggleProvider
-} from "./common/provider/ToggleProvider";
+} from "./common/providers/ToggleProvider";
 import Routes from "./Routes";
 
 export const drawerWidth = 240;

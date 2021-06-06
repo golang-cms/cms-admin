@@ -11,7 +11,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { drawerWidth } from "../../Main";
 import { AdminBasePath } from "../../Routes";
-import { ToggleContext } from "../provider/ToggleProvider";
+import { ToggleContext } from "../providers/ToggleProvider";
 
 const useStyles = makeStyles((theme) => ({
   toolbarIcon: {

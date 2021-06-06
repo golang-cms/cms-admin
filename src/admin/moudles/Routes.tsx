@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { BasePath } from "../../App";
-import Dashboard from "./dashboard/component/Dashboard";
-import Post from "./post/component/Post";
+import Dashboard from "./dashboard/components/Dashboard";
+import Post from "./post/components/Post";
 
 export const AdminBasePath = BasePath + "/admin"
 const Routes = () => (
