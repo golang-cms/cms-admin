@@ -1,1 +1,0 @@
-{"version":3,"sources":["landing/moudles/Main.tsx"],"names":["Main"],"mappings":"gIAOeA,UAPF,WACT,OACI,8BACI","file":"static/js/5.14f4e1bc.chunk.js","sourcesContent":["const Main = () => {\n    return (\n        <div>\n            <h2>Landing Page</h2>\n        </div>);\n}\n\nexport default Main;"],"sourceRoot":""}
