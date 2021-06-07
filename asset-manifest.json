@@ -1,30 +1,30 @@
 {
   "files": {
-    "static/js/0.eb56c3b4.chunk.js": "/cms-admin/static/js/0.eb56c3b4.chunk.js",
-    "static/js/0.eb56c3b4.chunk.js.map": "/cms-admin/static/js/0.eb56c3b4.chunk.js.map",
+    "static/js/0.22bd6fc6.chunk.js": "/cms-admin/static/js/0.22bd6fc6.chunk.js",
+    "static/js/0.22bd6fc6.chunk.js.map": "/cms-admin/static/js/0.22bd6fc6.chunk.js.map",
     "main.css": "/cms-admin/static/css/main.f29ae65a.chunk.css",
-    "main.js": "/cms-admin/static/js/main.7b66545f.chunk.js",
-    "main.js.map": "/cms-admin/static/js/main.7b66545f.chunk.js.map",
-    "runtime-main.js": "/cms-admin/static/js/runtime-main.5d6f7911.js",
-    "runtime-main.js.map": "/cms-admin/static/js/runtime-main.5d6f7911.js.map",
-    "static/js/3.30166c80.chunk.js": "/cms-admin/static/js/3.30166c80.chunk.js",
-    "static/js/3.30166c80.chunk.js.map": "/cms-admin/static/js/3.30166c80.chunk.js.map",
-    "static/js/4.b4cdecc4.chunk.js": "/cms-admin/static/js/4.b4cdecc4.chunk.js",
-    "static/js/4.b4cdecc4.chunk.js.map": "/cms-admin/static/js/4.b4cdecc4.chunk.js.map",
-    "static/js/5.fb1ee5d5.chunk.js": "/cms-admin/static/js/5.fb1ee5d5.chunk.js",
-    "static/js/5.fb1ee5d5.chunk.js.map": "/cms-admin/static/js/5.fb1ee5d5.chunk.js.map",
-    "static/js/6.fa6ce6be.chunk.js": "/cms-admin/static/js/6.fa6ce6be.chunk.js",
-    "static/js/6.fa6ce6be.chunk.js.map": "/cms-admin/static/js/6.fa6ce6be.chunk.js.map",
-    "static/js/7.7bd30cec.chunk.js": "/cms-admin/static/js/7.7bd30cec.chunk.js",
-    "static/js/7.7bd30cec.chunk.js.map": "/cms-admin/static/js/7.7bd30cec.chunk.js.map",
+    "main.js": "/cms-admin/static/js/main.3b50d887.chunk.js",
+    "main.js.map": "/cms-admin/static/js/main.3b50d887.chunk.js.map",
+    "runtime-main.js": "/cms-admin/static/js/runtime-main.b95d2f4b.js",
+    "runtime-main.js.map": "/cms-admin/static/js/runtime-main.b95d2f4b.js.map",
+    "static/js/3.f3e8e4ce.chunk.js": "/cms-admin/static/js/3.f3e8e4ce.chunk.js",
+    "static/js/3.f3e8e4ce.chunk.js.map": "/cms-admin/static/js/3.f3e8e4ce.chunk.js.map",
+    "static/js/4.cc095dc4.chunk.js": "/cms-admin/static/js/4.cc095dc4.chunk.js",
+    "static/js/4.cc095dc4.chunk.js.map": "/cms-admin/static/js/4.cc095dc4.chunk.js.map",
+    "static/js/5.c8747475.chunk.js": "/cms-admin/static/js/5.c8747475.chunk.js",
+    "static/js/5.c8747475.chunk.js.map": "/cms-admin/static/js/5.c8747475.chunk.js.map",
+    "static/js/6.986a0578.chunk.js": "/cms-admin/static/js/6.986a0578.chunk.js",
+    "static/js/6.986a0578.chunk.js.map": "/cms-admin/static/js/6.986a0578.chunk.js.map",
+    "static/js/7.e67e451c.chunk.js": "/cms-admin/static/js/7.e67e451c.chunk.js",
+    "static/js/7.e67e451c.chunk.js.map": "/cms-admin/static/js/7.e67e451c.chunk.js.map",
     "index.html": "/cms-admin/index.html",
     "static/css/main.f29ae65a.chunk.css.map": "/cms-admin/static/css/main.f29ae65a.chunk.css.map",
-    "static/js/3.30166c80.chunk.js.LICENSE.txt": "/cms-admin/static/js/3.30166c80.chunk.js.LICENSE.txt"
+    "static/js/3.f3e8e4ce.chunk.js.LICENSE.txt": "/cms-admin/static/js/3.f3e8e4ce.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.5d6f7911.js",
-    "static/js/3.30166c80.chunk.js",
+    "static/js/runtime-main.b95d2f4b.js",
+    "static/js/3.f3e8e4ce.chunk.js",
     "static/css/main.f29ae65a.chunk.css",
-    "static/js/main.7b66545f.chunk.js"
+    "static/js/main.3b50d887.chunk.js"
   ]
 }
