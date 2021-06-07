@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
+
 const Dashboard = () => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);

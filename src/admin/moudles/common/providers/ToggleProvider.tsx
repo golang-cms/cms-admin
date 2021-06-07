@@ -1,8 +1,7 @@
 import { createContext, useState } from "react";
 
 type ToggleHook = [boolean, (open: boolean) => void];
-const initToggle: ToggleHook = [true, () => {}];
-export const ToggleContext = createContext<ToggleHook>(initToggle);
+export const ToggleContext = createContext<ToggleHook>({} as ToggleHook);
 
 export const ToggleProvider: React.FC<{}> = ({ children }) => {
   const [toggle, setToggle] = useState(true);
