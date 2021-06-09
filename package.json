@@ -2,7 +2,7 @@
   "name": "cms-admin",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://golang-cms.github.io/cms-admin",
+  "homepage": "https://golang-cms.github.io",
   "description": "CMS admin management",
   "keywords": [
     "typescript",
