@@ -1,8 +1,17 @@
-import { Divider, Drawer, IconButton, List, makeStyles } from "@material-ui/core";
+import { Divider, Drawer, IconButton, makeStyles } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import PagesIcon from '@material-ui/icons/Pages';
 import clsx from 'clsx';
-import { useContext } from "react";
-import { drawerWidth, LeftMenuContext } from "../Main";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { drawerWidth } from "../../Main";
+import { AdminBasePath } from "../../Routes";
+import { ToggleContext } from "../providers/ToggleProvider";
 
 const useStyles = makeStyles((theme) => ({
   toolbarIcon: {
@@ -44,18 +53,18 @@ const useStyles = makeStyles((theme) => ({
 const LeftMenu = () => {
   const classes = useStyles();
  
-  const [leftMenuOpenContext, setLeftMenuOpenContext] = useContext(LeftMenuContext);
+  const [toggle, setToggle] = useContext(ToggleContext);
   const handleDrawerClose = () => {
-    setLeftMenuOpenContext(false);
+    setToggle(false);
   };
 
   return (
     <Drawer
       variant="permanent"
       classes={{
-        paper: clsx(classes.drawerPaper, !leftMenuOpenContext && classes.drawerPaperClose),
+        paper: clsx(classes.drawerPaper, !toggle && classes.drawerPaperClose),
       }}
-      open={leftMenuOpenContext}
+      open={toggle}
     >
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerClose}>
@@ -63,11 +72,27 @@ const LeftMenu = () => {
         </IconButton>
       </div>
       <Divider />
-      <List></List>
+      <List>{mainListItems}</List>
       <Divider />
       <List></List>
     </Drawer>
   );
 };
 
+const mainListItems = (
+    <div>
+      <ListItem button component={Link} to={AdminBasePath}>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button component={Link} to={AdminBasePath + "/post"} >
+        <ListItemIcon>
+          <PagesIcon />
+        </ListItemIcon>
+        <ListItemText primary="Post" />
+      </ListItem>
+    </div>
+);
 export default LeftMenu;

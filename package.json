@@ -49,6 +49,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "proxy": "https://cms-api-content-api-cms-zt1983811.cloud.okteto.net",
   "browserslist": {
     "production": [
       ">0.2%",
