@@ -8,7 +8,7 @@ import { RequestProvider } from "./providers/request/RequestProvider";
 const AdminComponent = lazy(() => import("./admin/moudles/Main"));
 const LandingComponent = lazy(() => import("./landing/moudles/Main"));
 
-export const BasePath = "/";
+export const BasePath = "";
 
 const app = () => {
   return (
