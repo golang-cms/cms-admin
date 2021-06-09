@@ -9,9 +9,11 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import usePosts from "../../../../hooks/usePosts";
+import PostDialog from "./PostDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -23,9 +25,21 @@ const useStyles = makeStyles({
 });
 
 const Post = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Grid container spacing={3}>
       Post page
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>Create Post</Button>
+      <PostDialog open={open} onClose={handleClose} />
       <Grid item xs={12}>
         <PostsTable />
       </Grid>
