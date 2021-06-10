@@ -8,11 +8,10 @@ import { RequestProvider } from "./providers/request/RequestProvider";
 const AdminComponent = lazy(() => import("./admin/moudles/Main"));
 const LandingComponent = lazy(() => import("./landing/moudles/Main"));
 
-export const BasePath = "";
 
 const app = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <MuiThemeProvider theme={theme}>
         <RequestProvider>
           <CssBaseline />
@@ -20,7 +19,7 @@ const app = () => {
           {/* <Pace color={theme.palette.primary.light} /> */}
           <Suspense fallback={<Fragment />}>
             <Switch>
-              <Route path={BasePath + "/admin"}>
+              <Route path={"/admin"}>
                 <AdminComponent />
               </Route>
               <Route>

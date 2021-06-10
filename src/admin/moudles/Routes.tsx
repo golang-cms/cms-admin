@@ -1,10 +1,9 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { BasePath } from "../../App";
 import Dashboard from "./dashboard/components/Dashboard";
 import Post from "./post/components/Post";
 
-export const AdminBasePath = BasePath + "/admin"
+export const AdminBasePath = "/admin"
 const Routes = () => (
     <Switch>
         <Route path={AdminBasePath} exact component={Dashboard} />
