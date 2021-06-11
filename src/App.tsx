@@ -1,13 +1,12 @@
-import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
+import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 import React, { Fragment, lazy, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import theme from "./theme";
+import { RequestProvider } from "./providers/request/RequestProvider";
 //import GlobalStyles from "./GlobalStyles";
 import "./styles.css";
-import { RequestProvider } from "./providers/request/RequestProvider";
+import theme from "./theme";
 const AdminComponent = lazy(() => import("./admin/moudles/Main"));
 const LandingComponent = lazy(() => import("./landing/moudles/Main"));
-
 
 const app = () => {
   return (

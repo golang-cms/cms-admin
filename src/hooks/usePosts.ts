@@ -9,7 +9,7 @@ const usePosts = () => {
   return useApiResult(request);
 };
 
-const CONTENT_API_BASE_URL = "/v1";
+const CONTENT_API_BASE_URL = "https://cms-api-content-api-cms-zt1983811.cloud.okteto.net/v1";
 const getPosts = (): IRequest => {
   return [
     `${CONTENT_API_BASE_URL}/posts`,
