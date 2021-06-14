@@ -13,7 +13,9 @@ import TextField from "@material-ui/core/TextField";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
-import React from "react";
+import React, { useState } from "react";
+import { FieldValues, useForm, UseFormRegister } from "react-hook-form";
+import useCreatePost from "../../../../hooks/post/useCreatePost";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -42,8 +44,7 @@ const PostDialog = (props: PostDialogProps) => {
         onClose={props.onClose}
         TransitionComponent={Transition}
       >
-        <TopBar onClose={props.onClose} />
-        <Form />
+        <Form onClose={props.onClose} />
         <List>
           <ListItem button>
             <ListItemText primary="Phone ringtone" secondary="Titania" />
@@ -61,7 +62,39 @@ const PostDialog = (props: PostDialogProps) => {
   );
 };
 
-const Form = () => {
+const Form = ({ onClose }: { onClose: () => void }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    //  formState: { errors },
+  } = useForm();
+
+  const [data, setData] = useState();
+  const [rows, error] = useCreatePost(data);
+  console.log(rows, error);
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+    setData(data);
+    onClose();
+  };
+
+  console.log(watch("title"));
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <TopBar onClose={onClose} />
+      <DialogForm register={register} />
+    </form>
+  );
+};
+
+const DialogForm = ({
+  register,
+}: {
+  register: UseFormRegister<FieldValues>;
+}) => {
   return (
     <DialogContent>
       <TextField
@@ -71,8 +104,18 @@ const Form = () => {
         label="Title"
         type="title"
         fullWidth
+        {...register("title")}
       />
-       <TextField
+      <TextField
+        autoFocus
+        margin="dense"
+        id="name"
+        label="Slug"
+        type="slug"
+        fullWidth
+        {...register("slug")}
+      />
+      <TextField
         autoFocus
         margin="dense"
         id="name"
@@ -81,8 +124,8 @@ const Form = () => {
         label="Content"
         type="content"
         fullWidth
+        {...register("content")}
       />
-      
     </DialogContent>
   );
 };
@@ -103,7 +146,7 @@ const TopBar = ({ onClose }: { onClose: () => void }) => {
         <Typography variant="h6" className={classes.title}>
           Post
         </Typography>
-        <Button autoFocus color="inherit" onClick={onClose}>
+        <Button autoFocus color="inherit" type="submit">
           save
         </Button>
       </Toolbar>

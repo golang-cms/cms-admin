@@ -1,18 +1,17 @@
 import {
-    makeStyles,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-
-    TableContainer,
-    TableHead,
-    TableRow
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
-import usePosts from "../../../../hooks/usePosts";
+import useGetPosts from "../../../../hooks/post/useGetPosts";
 import PostDialog from "./PostDialog";
 
 const useStyles = makeStyles({
@@ -26,7 +25,6 @@ const useStyles = makeStyles({
 
 const Post = () => {
   const [open, setOpen] = React.useState(false);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -38,10 +36,12 @@ const Post = () => {
   return (
     <Grid container spacing={3}>
       Post page
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>Create Post</Button>
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        Create Post
+      </Button>
       <PostDialog open={open} onClose={handleClose} />
       <Grid item xs={12}>
-        <PostsTable />
+        <PostsTable updated={!open} />
       </Grid>
     </Grid>
   );
@@ -49,12 +49,15 @@ const Post = () => {
 
 const columns = [
   { id: "id", label: "ID", minWidth: 170 },
-  { id: "content", label: "Title", minWidth: 100 },
+  { id: "title", label: "Title", minWidth: 100 },
+  { id: "slug", label: "Slug", minWidth: 100 },
+  { id: "createAt", label: "Create At", minWidth: 100 },
+  { id: "updateAt", label: "Update At", minWidth: 100 },
 ];
 
-const PostsTable = () => {
+const PostsTable = ({ updated }: { updated: boolean }) => {
   const classes = useStyles();
-  const [rows, error] = usePosts();
+  const [rows, error] = useGetPosts(updated);
   if (error !== null) {
     console.log(error);
   }
@@ -81,19 +84,22 @@ const PostsTable = () => {
                   return <div>{row["id"]}{row["content"]}</div>;
                 })
             : "" */}
-            {rows !== null
-              ? rows.map((row: any) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row['id']}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return <TableCell key={column.id}>{value}</TableCell>;
-                      })}
-                    </TableRow>
-                  );
-                })
-              : <TableRow><TableCell key="NO_DATA">NO Data</TableCell></TableRow>
-        }
+            {rows !== null ? (
+              rows.map((row: any) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row["id"]}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return <TableCell key={column.id}>{value}</TableCell>;
+                    })}
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell key="NO_DATA">NO Data</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

@@ -14,8 +14,8 @@ import React, { useContext } from "react";
 import Copyright from "./common/components/CopyRight";
 import LeftMenu from "./common/components/LeftMenu";
 import {
-    ToggleContext,
-    ToggleProvider
+  ToggleContext,
+  ToggleProvider,
 } from "./common/providers/ToggleProvider";
 import Routes from "./Routes";
 
