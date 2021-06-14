@@ -1,19 +1,14 @@
-
-import { Typography, Badge } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/MenuIcon';
-import { makeStyles } from '@material-ui/core/styles';
-
-import Toolbar from '@material-ui/core/Toolbar';
-import clsx from 'clsx';
+import { Typography, Badge } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import clsx from "clsx";
 import React, { useContext } from "react";
 import { drawerWidth } from "../../Main";
 import { ToggleContext } from "../providers/ToggleProvider";
-
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -45,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const TopBar = () => {
   const classes = useStyles();
   const [toggle, setToggle] = useContext(ToggleContext);
@@ -65,7 +59,8 @@ const TopBar = () => {
           onClick={handleDrawerOpen}
           className={clsx(
             classes.menuButton,
-            toggle && classes.menuButtonHidden)}
+            toggle && classes.menuButtonHidden
+          )}
         >
           <MenuIcon />
         </IconButton>
