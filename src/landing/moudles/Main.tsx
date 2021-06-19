@@ -14,6 +14,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { AdminBasePath } from "../../admin/moudles/Routes";
 import Copyright from "../../admin/moudles/common/components/CopyRight";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link as Linked,
+} from "react-router-dom";
+import Dashboard from "../../admin/moudles/dashboard/components/Dashboard";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -75,16 +81,21 @@ export default function Main() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            href={AdminBasePath}
-          >
-            Sign In
-          </Button>
+
+          <Router>
+            <Linked to={AdminBasePath}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign In
+              </Button>
+            </Linked>
+          </Router>
+
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
