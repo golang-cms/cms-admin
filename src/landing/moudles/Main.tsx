@@ -41,9 +41,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface UserModel {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+const registgeredUsers UserModel[] = [
+    new UserModel(email: "tong@gmail.com", password: "abc123"),
+    new UserModel(email: "hk@gmail.com", password: "hk123"),
+]
+
+
 export default function Main() {
   const classes = useStyles();
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
