@@ -12,7 +12,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import useGetPosts from "../../../../hooks/post/useGetPosts";
+import { PostModel } from "../model/post";
 import PostDialog from "./PostDialog";
+import _ from "lodash";
 
 const useStyles = makeStyles({
   root: {
@@ -25,23 +27,39 @@ const useStyles = makeStyles({
 
 const Post = () => {
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
+  const [saved, setSaved] = React.useState(false);
+  const [data, setData] = React.useState<PostModel>();
+  const handleClickOpen = (data?: PostModel) => {
     setOpen(true);
+    if (data) {
+      setData(data);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleSaved = () => setSaved(true);
+
   return (
     <Grid container spacing={3}>
       Post page
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleClickOpen()}
+      >
         Create Post
       </Button>
-      <PostDialog open={open} onClose={handleClose} />
+      <PostDialog
+        open={open}
+        onClose={handleClose}
+        onSaved={handleSaved}
+        data={data}
+      />
       <Grid item xs={12}>
-        <PostsTable updated={!open} />
+        <PostsTable updated={saved} handleClickOpen={handleClickOpen} />
       </Grid>
     </Grid>
   );
@@ -53,9 +71,16 @@ const columns = [
   { id: "slug", label: "Slug", minWidth: 100 },
   { id: "createAt", label: "Create At", minWidth: 100 },
   { id: "updateAt", label: "Update At", minWidth: 100 },
+  { id: "actions", label: "Actions", minWidth: 100 },
 ];
 
-const PostsTable = ({ updated }: { updated: boolean }) => {
+const PostsTable = ({
+  updated,
+  handleClickOpen,
+}: {
+  updated: boolean;
+  handleClickOpen: (data?: PostModel) => void;
+}) => {
   const classes = useStyles();
   const [rows, error] = useGetPosts(updated);
   if (error !== null) {
@@ -85,11 +110,22 @@ const PostsTable = ({ updated }: { updated: boolean }) => {
                 })
             : "" */}
             {rows !== null ? (
-              rows.map((row: any) => {
+              rows.map((row: PostModel) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row["id"]}>
                     {columns.map((column) => {
-                      const value = row[column.id];
+                      const value =
+                        column.id === "actions" ? (
+                          <Button
+                            color="secondary"
+                            variant="contained"
+                            onClick={() => handleClickOpen(row)}
+                          >
+                            Edit
+                          </Button>
+                        ) : (
+                          _.get(row, column.id)
+                        );
                       return <TableCell key={column.id}>{value}</TableCell>;
                     })}
                   </TableRow>

@@ -5,20 +5,20 @@ import useApiResult from "../useApiResult";
 
 const CONTENT_API_BASE_URL = "https://cms-api-content-api-cms-zt1983811.cloud.okteto.net/v1";
 
-const useCreatePost = (post?: PostModel) => {
+const useUpdatePost = (post?: PostModel) => {
     //TODO may use it later for cache
-    const request = useMemo(() => createPost(post), [post]);
+    const request = useMemo(() => updatePost(post), [post]);
     return useApiResult(request);
 };
 
-const createPost = (post?: PostModel): IRequest => {
+const updatePost = (post?: PostModel): IRequest => {
     return [
-        `${CONTENT_API_BASE_URL}/posts`,
+        `${CONTENT_API_BASE_URL}/posts/${post?.id}`,
         {
             body: JSON.stringify(post),
-            method: "POST",
+            method: "PUT",
         },
     ];
 }
 
-export default useCreatePost;
+export default useUpdatePost;

@@ -6,13 +6,13 @@ const CONTENT_API_BASE_URL = "https://cms-api-content-api-cms-zt1983811.cloud.ok
 
 const useGetPosts = (updated: boolean) => {
     //TODO may use it later for cache
-    const request = useMemo(() => getPosts(), [updated]);
+    const request = useMemo(() => getPosts(updated), [updated]);
     //const request = getPosts();
     return useApiResult(request);
 };
 
 
-const getPosts = (): IRequest => {
+const getPosts = (updated: boolean): IRequest => {
     return [
         `${CONTENT_API_BASE_URL}/posts`,
         {
