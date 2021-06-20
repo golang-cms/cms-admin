@@ -8,18 +8,23 @@ const useApiResult = (request: IRequest) => {
     const requester = useRequest();
 
     useEffect(() => {
-        requester(request)
-        .then(async (response: Response) => {
+        let isCancelled = false;
+        requester(request).then(async (response: Response) => {
+            if (isCancelled) {
+                return;
+            }
             if (response.ok) {
                 setResults(await response.json());
                 setError(null);
             } else {
                 setError(await response.text());
             }
-        })
-        .catch((err) => {
+        }).catch((err) => {
             setError(err.message);
         });
+        return () => {
+            isCancelled = true;
+        };
     }, [request, requester]);
     return [results, error];
 };

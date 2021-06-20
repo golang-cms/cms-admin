@@ -13,7 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, UseFormRegister } from "react-hook-form";
 import useCreatePost from "../../../../hooks/post/useCreatePost";
 import useUpdatePost from "../../../../hooks/post/useUpdatePost";
@@ -35,7 +35,6 @@ const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
 interface PostDialogProps {
   open: boolean;
   onClose: () => void;
-  onSaved: () => void;
   data?: PostModel;
 }
 
@@ -48,12 +47,7 @@ const PostDialog = (props: PostDialogProps) => {
         onClose={props.onClose}
         TransitionComponent={Transition}
       >
-        <Form
-          open={props.open}
-          onClose={props.onClose}
-          onSaved={props.onSaved}
-          data={props.data}
-        />
+        <Form open={props.open} onClose={props.onClose} data={props.data} />
         <List>
           <ListItem button>
             <ListItemText primary="Phone ringtone" secondary="Titania" />
@@ -77,49 +71,57 @@ const Form = (props: PostDialogProps) => {
     handleSubmit,
     watch,
     //  formState: { errors },
-  } = useForm({
+  } = useForm<PostModel>({
     shouldUnregister: false,
-    defaultValues: {} as PostModel,
+    // defaultValues: {} as PostModel,
     // defaultValues: props.data as Post,
   });
-
   const [data, setData] = useState<PostModel>();
   const onSubmit = (data: PostModel) => {
     console.log(data);
     data = { ...props?.data, ...data };
     setData(data);
-    props.onSaved();
     props.onClose();
   };
 
   console.log(watch("title"));
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {data ? (
-        props.data ? (
-          <UpdatePost data={data} />
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TopBar onClose={props.onClose} />
+        <DialogForm register={register} post={props?.data} />
+      </form>
+      {data &&
+        (props?.data ? (
+          <UpdatePost data={data} setData={setData} />
         ) : (
           <CreatePost data={data} />
-        )
-      ) : (
-        ""
-      )}
-      <TopBar onClose={props.onClose} />
-      <DialogForm register={register} post={props?.data as PostModel} />
-    </form>
+        ))}
+    </div>
   );
 };
 
 const CreatePost = ({ data }: { data?: PostModel }) => {
   const [rows, error] = useCreatePost(data);
-  console.log(rows, error);
+  console.log("Create post: ", rows, error);
   return null;
 };
 
-const UpdatePost = ({ data }: { data?: PostModel }) => {
+const UpdatePost = ({
+  data,
+  setData,
+}: {
+  data?: PostModel;
+  setData: (data?: PostModel) => void;
+}) => {
   const [rows, error] = useUpdatePost(data);
-  console.log(rows, error);
+  console.log("Update post: ", rows, error);
+  useEffect(() => {
+    console.log("update post clean data");
+    setData(undefined);
+  }, [setData]);
+
   return null;
 };
 

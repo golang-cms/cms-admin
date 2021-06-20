@@ -10,11 +10,11 @@ import {
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import _ from "lodash";
 import React from "react";
 import useGetPosts from "../../../../hooks/post/useGetPosts";
 import { PostModel } from "../model/post";
 import PostDialog from "./PostDialog";
-import _ from "lodash";
 
 const useStyles = makeStyles({
   root: {
@@ -31,16 +31,18 @@ const Post = () => {
   const [data, setData] = React.useState<PostModel>();
   const handleClickOpen = (data?: PostModel) => {
     setOpen(true);
+    // setSaved(false);
     if (data) {
       setData(data);
     }
   };
 
   const handleClose = () => {
+    console.log("close dialog");
     setOpen(false);
+    setData(undefined);
+    setSaved(!saved);
   };
-
-  const handleSaved = () => setSaved(true);
 
   return (
     <Grid container spacing={3}>
@@ -52,12 +54,7 @@ const Post = () => {
       >
         Create Post
       </Button>
-      <PostDialog
-        open={open}
-        onClose={handleClose}
-        onSaved={handleSaved}
-        data={data}
-      />
+      <PostDialog open={open} onClose={handleClose} data={data} />
       <Grid item xs={12}>
         <PostsTable updated={saved} handleClickOpen={handleClickOpen} />
       </Grid>
