@@ -9,6 +9,8 @@ import { drawerWidth } from "../../Main";
 import { ToggleContext } from "../providers/ToggleProvider";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import { useLocation } from "react-router-dom";
+import { routesDefinition } from "../../Routes";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -46,6 +48,11 @@ const TopBar = () => {
   const handleDrawerOpen = () => {
     setToggle(true);
   };
+  const location = useLocation();
+  const currentRoute = routesDefinition.find(
+    ({ path }) => path === location.pathname
+  );
+
   return (
     <AppBar
       position="absolute"
@@ -71,7 +78,7 @@ const TopBar = () => {
           noWrap
           className={classes.title}
         >
-          Dashboard
+          {currentRoute?.name}
         </Typography>
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
