@@ -46,7 +46,6 @@ const Post = () => {
 
   return (
     <Grid container spacing={3}>
-      Post page
       <Button
         variant="contained"
         color="primary"
