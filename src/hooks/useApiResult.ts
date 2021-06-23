@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { IRequest } from "../providers/request/Request";
 import { useRequest } from "../providers/request/RequestProvider";
 
-const useApiResult = (request: IRequest) => {
+const useApiResult = (request?: IRequest) => {
     const [results, setResults] = useState(null);
     const [error, setError] = useState<any>(null);
     const requester = useRequest();
 
     useEffect(() => {
         let isCancelled = false;
+        if (request === undefined) {
+            return;
+        }
         requester(request).then(async (response: Response) => {
             if (isCancelled) {
                 return;

@@ -14,6 +14,7 @@ import _ from "lodash";
 import React from "react";
 import useGetPosts from "../../../../hooks/post/useGetPosts";
 import { PostModel } from "../model/post";
+import DeleteDialog from "./DeleteDialog";
 import PostDialog from "./PostDialog";
 
 const useStyles = makeStyles({
@@ -25,21 +26,45 @@ const useStyles = makeStyles({
   },
 });
 
+export enum Action {
+  Delete,
+  Update,
+  Create,
+}
+
 const Post = () => {
   const [open, setOpen] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
   const [data, setData] = React.useState<PostModel>();
-  const handleClickOpen = (data?: PostModel) => {
-    setOpen(true);
-    // setSaved(false);
+
+  const handleClickOpen = (action: Action, data?: PostModel) => {
+    switch (action) {
+      case Action.Create:
+      case Action.Update:
+        setOpen(true);
+        break;
+      case Action.Delete:
+        setOpenDelete(true);
+        break;
+    }
+
     if (data) {
       setData(data);
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (action: Action) => {
     console.log("close dialog");
-    setOpen(false);
+    switch (action) {
+      case Action.Create:
+      case Action.Update:
+        setOpen(false);
+        break;
+      case Action.Delete:
+        setOpenDelete(false);
+        break;
+    }
     setData(undefined);
     setSaved(!saved);
   };
@@ -49,11 +74,12 @@ const Post = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => handleClickOpen()}
+        onClick={() => handleClickOpen(Action.Create)}
       >
-        Create Post
+        Create
       </Button>
       <PostDialog open={open} onClose={handleClose} data={data} />
+      <DeleteDialog open={openDelete} onClose={handleClose} data={data} />
       <Grid item xs={12}>
         <PostsTable updated={saved} handleClickOpen={handleClickOpen} />
       </Grid>
@@ -75,7 +101,7 @@ const PostsTable = ({
   handleClickOpen,
 }: {
   updated: boolean;
-  handleClickOpen: (data?: PostModel) => void;
+  handleClickOpen: (action: Action, data?: PostModel) => void;
 }) => {
   const classes = useStyles();
   const [rows, error] = useGetPosts(updated);
@@ -110,19 +136,18 @@ const PostsTable = ({
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row["id"]}>
                     {columns.map((column) => {
-                      const value =
-                        column.id === "actions" ? (
-                          <Button
-                            color="secondary"
-                            variant="contained"
-                            onClick={() => handleClickOpen(row)}
-                          >
-                            Edit
-                          </Button>
-                        ) : (
-                          _.get(row, column.id)
-                        );
-                      return <TableCell key={column.id}>{value}</TableCell>;
+                      return (
+                        <TableCell key={column.id}>
+                          {column.id === "actions" ? (
+                            <ActionButtons
+                              handleClickOpen={handleClickOpen}
+                              row={row}
+                            />
+                          ) : (
+                            _.get(row, column.id)
+                          )}
+                        </TableCell>
+                      );
                     })}
                   </TableRow>
                 );
@@ -136,6 +161,33 @@ const PostsTable = ({
         </Table>
       </TableContainer>
     </Paper>
+  );
+};
+
+const ActionButtons = ({
+  handleClickOpen,
+  row,
+}: {
+  handleClickOpen: (action: Action, data?: PostModel) => void;
+  row: PostModel;
+}) => {
+  return (
+    <div>
+      <Button
+        color="secondary"
+        variant="contained"
+        onClick={() => handleClickOpen(Action.Update, row)}
+      >
+        Edit
+      </Button>
+      <Button
+        color="default"
+        variant="contained"
+        onClick={() => handleClickOpen(Action.Delete, row)}
+      >
+        Delete
+      </Button>
+    </div>
   );
 };
 

@@ -18,6 +18,7 @@ import { useForm, UseFormRegister } from "react-hook-form";
 import useCreatePost from "../../../../hooks/post/useCreatePost";
 import useUpdatePost from "../../../../hooks/post/useUpdatePost";
 import { PostModel } from "../model/post";
+import { Action } from "./Post";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -34,9 +35,11 @@ const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
 });
 interface PostDialogProps {
   open: boolean;
-  onClose: () => void;
+  onClose: (action: Action) => void;
   data?: PostModel;
 }
+
+const action = (data?: PostModel) => (data ? Action.Update : Action.Create);
 
 const PostDialog = (props: PostDialogProps) => {
   return (
@@ -44,10 +47,14 @@ const PostDialog = (props: PostDialogProps) => {
       <Dialog
         fullScreen
         open={props.open}
-        onClose={props.onClose}
+        onClose={() => props.onClose(action(props.data))}
         TransitionComponent={Transition}
       >
-        <Form open={props.open} onClose={props.onClose} data={props.data} />
+        <Form
+          open={props.open}
+          onClose={() => props.onClose(action(props.data))}
+          data={props.data}
+        />
         <List>
           <ListItem button>
             <ListItemText primary="Phone ringtone" secondary="Titania" />
@@ -81,7 +88,7 @@ const Form = (props: PostDialogProps) => {
     console.log(data);
     data = { ...props?.data, ...data };
     setData(data);
-    props.onClose();
+    props.onClose(action(props.data));
   };
 
   console.log(watch("title"));
@@ -89,7 +96,7 @@ const Form = (props: PostDialogProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TopBar onClose={props.onClose} />
+        <TopBar data={props.data} onClose={props.onClose} />
         <DialogForm register={register} post={props?.data} />
       </form>
       {data &&
@@ -170,7 +177,13 @@ const DialogForm = ({
   );
 };
 
-const TopBar = ({ onClose }: { onClose: () => void }) => {
+const TopBar = ({
+  data,
+  onClose,
+}: {
+  data?: PostModel;
+  onClose: (action: Action) => void;
+}) => {
   const classes = useStyles();
   return (
     <AppBar className={classes.appBar}>
@@ -178,7 +191,7 @@ const TopBar = ({ onClose }: { onClose: () => void }) => {
         <IconButton
           edge="start"
           color="inherit"
-          onClick={onClose}
+          onClick={() => onClose(action(data))}
           aria-label="close"
         >
           <CloseIcon />
