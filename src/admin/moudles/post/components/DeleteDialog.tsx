@@ -20,7 +20,7 @@ interface DeleteDialogProps {
 const DeleteDialog = (props: DeleteDialogProps) => {
   const [deleteId, setDeleteId] = useState<number>();
   const [rows, error] = useDeletePost(deleteId);
-  console.log("Delete post: ", rows, error);
+  console.log("Delete post*****: ", rows, error);
   // const closeIt = props.onClose(Action.Delete);
   // const close = useCallback(() => closeIt, [closeIt]);
   useEffect(() => {
