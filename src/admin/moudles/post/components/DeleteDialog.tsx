@@ -28,7 +28,7 @@ const DeleteDialog = (props: DeleteDialogProps) => {
       props.onClose(Action.Delete);
       setDeleteId(undefined);
     }
-  }, [deleteId, props]);
+  }, [rows, deleteId, props]);
 
   return (
     <Dialog
