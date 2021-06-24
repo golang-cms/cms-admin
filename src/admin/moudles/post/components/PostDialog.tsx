@@ -88,7 +88,6 @@ const Form = (props: PostDialogProps) => {
     console.log(data);
     data = { ...props?.data, ...data };
     setData(data);
-    props.onClose(action(props.data));
   };
 
   console.log(watch("title"));
@@ -101,33 +100,55 @@ const Form = (props: PostDialogProps) => {
       </form>
       {data &&
         (props?.data ? (
-          <UpdatePost data={data} setData={setData} />
+          <UpdatePost data={data} setData={setData} onClose={props.onClose} />
         ) : (
-          <CreatePost data={data} />
+          <CreatePost data={data} setData={setData} onClose={props.onClose} />
         ))}
     </div>
   );
 };
 
-const CreatePost = ({ data }: { data?: PostModel }) => {
+const CreatePost = ({
+  data,
+  setData,
+  onClose,
+}: {
+  data?: PostModel;
+  setData: (data?: PostModel) => void;
+  onClose: (action: Action) => void;
+}) => {
   const [rows, error] = useCreatePost(data);
   console.log("Create post: ", rows, error);
+  useEffect(() => {
+    if (rows) {
+      console.log("update post clean data");
+      onClose(action({} as PostModel));
+      setData(undefined);
+    }
+  }, [rows, setData, onClose]);
+
+
   return null;
 };
 
 const UpdatePost = ({
   data,
   setData,
+  onClose,
 }: {
   data?: PostModel;
   setData: (data?: PostModel) => void;
+  onClose: (action: Action) => void;
 }) => {
   const [rows, error] = useUpdatePost(data);
   console.log("Update post: ", rows, error);
   useEffect(() => {
-    console.log("update post clean data");
-    setData(undefined);
-  }, [setData]);
+    if (rows && rows.id === data?.id) {
+      console.log("update post clean data");
+      onClose(action(data));
+      setData(undefined);
+    }
+  }, [data, rows, setData, onClose]);
 
   return null;
 };
