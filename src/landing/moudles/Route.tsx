@@ -1,8 +1,12 @@
 import { Switch, Route } from "react-router-dom";
-import Main from "./Main";
+import Login from "./login/Login";
 
 const Routes = () => {
   <Switch>
-    <Route path="/" exact component={Main} />
+    <Route path={LandingBasePath} exact component={Login} />
   </Switch>;
 };
+
+export const LandingBasePath = "";
+
+export default Routes;
