@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { IRequest } from "../providers/request/Request";
-import { useRequest } from "../providers/request/RequestProvider";
+import { IRequest } from "../../providers/request/Request";
+import { useRequest } from "../../providers/request/RequestProvider";
 
 const useApiResult = (request?: IRequest) => {
     const [results, setResults] = useState(null);

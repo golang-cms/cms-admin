@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { IRequest } from "../../providers/request/Request";
+import { IRequest } from "../../../providers/request/Request";
 import useApiResult from "../useApiResult";
 
 const useGetPosts = (updated: boolean) => {
