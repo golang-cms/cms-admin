@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { PostModel } from "../../admin/moudles/post/model/post";
-import { IRequest } from "../../providers/request/Request";
+import { PostModel } from "../../../admin/moudles/post/model/post";
+import { IRequest } from "../../../providers/request/Request";
 import useApiResult from "../useApiResult";
 
 const useCreatePost = (post?: PostModel) => {

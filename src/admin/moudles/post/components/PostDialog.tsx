@@ -14,10 +14,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import React, { useEffect, useState } from "react";
-import { useForm, UseFormRegister } from "react-hook-form";
-import useCreatePost from "../../../../hooks/post/useCreatePost";
-import useUpdatePost from "../../../../hooks/post/useUpdatePost";
+import { Control, Controller, useForm, UseFormRegister } from "react-hook-form";
+import useCreatePost from "../../../../hooks/api/post/useCreatePost";
+import useUpdatePost from "../../../../hooks/api/post/useUpdatePost";
 import { PostModel } from "../model/post";
+import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
 
 const useStyles = makeStyles((theme) => ({
@@ -77,11 +78,12 @@ const Form = (props: PostDialogProps) => {
     register,
     handleSubmit,
     watch,
+    control,
     //  formState: { errors },
   } = useForm<PostModel>({
     shouldUnregister: false,
     // defaultValues: {} as PostModel,
-    // defaultValues: props.data as Post,
+    // defaultValues: props.data,
   });
   const [data, setData] = useState<PostModel>();
   const onSubmit = (data: PostModel) => {
@@ -96,7 +98,7 @@ const Form = (props: PostDialogProps) => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TopBar data={props.data} onClose={props.onClose} />
-        <DialogForm register={register} post={props?.data} />
+        <DialogForm register={register} post={props?.data} control={control} />
       </form>
       {data &&
         (props?.data ? (
@@ -127,7 +129,6 @@ const CreatePost = ({
     }
   }, [rows, setData, onClose]);
 
-
   return null;
 };
 
@@ -156,9 +157,11 @@ const UpdatePost = ({
 const DialogForm = ({
   register,
   post,
+  control,
 }: {
   register: UseFormRegister<PostModel>;
   post?: PostModel;
+  control: Control<PostModel>;
 }) => {
   return (
     <DialogContent>
@@ -172,26 +175,37 @@ const DialogForm = ({
         {...register("title")}
         defaultValue={post?.title}
       />
-      <TextField
-        autoFocus
-        margin="dense"
-        id="name"
-        label="Slug"
-        type="slug"
-        fullWidth
-        {...register("slug")}
+      <MultiSelectTypeahead post={post} control={control} />
+      <Controller
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="slug"
+            label="Slug"
+            type="text"
+            fullWidth
+            {...field}
+          />
+        )}
+        control={control}
+        name="slug"
         defaultValue={post?.slug}
       />
-      <TextField
-        autoFocus
-        margin="dense"
-        id="name"
-        multiline
-        rows={8}
-        label="Content"
-        type="content"
-        fullWidth
-        {...register("content")}
+      <Controller
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="content"
+            label="Content"
+            type="text"
+            fullWidth
+            multiline
+            rows={8}
+            {...field}
+          />
+        )}
+        control={control}
+        name="content"
         defaultValue={post?.content}
       />
     </DialogContent>

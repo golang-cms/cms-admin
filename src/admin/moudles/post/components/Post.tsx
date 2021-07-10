@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import _ from "lodash";
 import React from "react";
-import useGetPosts from "../../../../hooks/post/useGetPosts";
+import useGetPosts from "../../../../hooks/api/post/useGetPosts";
 import { PostModel } from "../model/post";
 import DeleteDialog from "./DeleteDialog";
 import PostDialog from "./PostDialog";

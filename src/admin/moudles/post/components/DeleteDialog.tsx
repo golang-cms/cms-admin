@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import useDeletePost from "../../../../hooks/post/useDeletePost";
+import useDeletePost from "../../../../hooks/api/post/useDeletePost";
 import { PostModel } from "../model/post";
 import { Action } from "./Post";
 
