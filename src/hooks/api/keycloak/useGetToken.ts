@@ -12,7 +12,7 @@ const useGetToken = (loginModel?: LoginModel) => {
 
 const getToken = (loginModel: LoginModel): IRequest => {
     return [
-        `${process.env.REACT_APP_KEYCLOAK_API_BASE_URL}/auth/realms/golang-cms/protocol/openid-connect/token`,
+        `${process.env.REACT_APP_KEYCLOAK_API_BASE_URL}/auth/realms/${process.env.REACT_APP_KEYCLOAK_API_REALM}/protocol/openid-connect/token`,
         {
             method: "POST",
             headers: {
