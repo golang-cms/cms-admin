@@ -1,19 +1,25 @@
 import TextField from "@material-ui/core/TextField";
+import { UseFormRegister } from "react-hook-form";
+import { LoginModel } from "../model/Login";
 
-const Emailfield = () => {
+const EmailField = ({
+  register,
+}: {
+  register: UseFormRegister<LoginModel>;
+}) => {
   return (
     <TextField
       variant="outlined"
       margin="normal"
       required
       fullWidth
-      id="email"
+      id="username"
       label="Email Address"
-      name="email"
-      autoComplete="email"
+      autoComplete="username"
       autoFocus
+      {...register("username")}
     />
   );
 };
 
-export default Emailfield;
+export default EmailField;

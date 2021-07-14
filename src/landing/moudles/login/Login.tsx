@@ -1,9 +1,16 @@
 import { makeStyles } from "@material-ui/core/styles";
-import Emailfield from "./components/EmailField";
-import Pagetitle from "./components/PageTitle";
-import Passwordfield from "./components/PasswordField";
-import Redirectoptions from "./components/RedirectOptions";
-import Signinbutton from "./components/SigninButton";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Redirect } from "react-router-dom";
+import { AdminBasePath } from "../../../admin/moudles/Routes";
+import useGetToken from "../../../hooks/api/keycloak/useGetToken";
+import { TokenContext } from "../../../providers/token/TokenProvider";
+import EmailField from "./components/EmailField";
+import PageTitle from "./components/PageTitle";
+import PasswordField from "./components/PasswordField";
+import RedirectOptions from "./components/RedirectOptions";
+import SignInButton from "./components/SigninButton";
+import { LoginModel } from "./model/Login";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -14,15 +21,35 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+  const [login, setLogin] = useState<LoginModel>();
+  const [access, error] = useGetToken(login);
+  const [token, setToken] = useContext(TokenContext);
+  console.log(access, error);
+  const { register, handleSubmit, watch } = useForm<LoginModel>();
+  const onSubmit = (submitLogin: LoginModel) => {
+    console.log(submitLogin, token);
+    setLogin(submitLogin);
+  };
+
+  if (access) {
+    setToken(access);
+    return <Redirect to={AdminBasePath} />;
+  }
+
+  console.log(watch("username"));
 
   return (
     <div>
-      <Pagetitle />
-      <form className={classes.form} noValidate>
-        <Emailfield />
-        <Passwordfield />
-        <Signinbutton />
-        <Redirectoptions />
+      <PageTitle />
+      <form
+        className={classes.form}
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <EmailField register={register} />
+        <PasswordField register={register} />
+        <SignInButton />
+        <RedirectOptions />
       </form>
     </div>
   );

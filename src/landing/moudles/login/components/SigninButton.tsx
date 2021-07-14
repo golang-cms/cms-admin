@@ -1,6 +1,5 @@
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import { AdminBasePath } from "../../../../admin/moudles/Routes";
 
 const useStyles = makeStyles((theme) => ({
   submit: {
@@ -8,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signinbutton = () => {
+const SignInButton = () => {
   const classes = useStyles();
 
   return (
@@ -18,11 +17,10 @@ const Signinbutton = () => {
       variant="contained"
       color="primary"
       className={classes.submit}
-      href={AdminBasePath}
     >
       Sign In
     </Button>
   );
 };
 
-export default Signinbutton;
+export default SignInButton;

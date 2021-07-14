@@ -9,8 +9,10 @@ import { drawerWidth } from "../../Main";
 import { ToggleContext } from "../providers/ToggleProvider";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useLocation } from "react-router-dom";
 import { routesDefinition } from "../../Routes";
+import { TokenContext } from "../../../../providers/token/TokenProvider";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -45,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const TopBar = () => {
   const classes = useStyles();
   const [toggle, setToggle] = useContext(ToggleContext);
+  const [, , resetToken] = useContext(TokenContext);
   const handleDrawerOpen = () => {
     setToggle(true);
   };
@@ -83,6 +86,17 @@ const TopBar = () => {
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
             <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            resetToken();
+            window.location.reload();
+          }}
+        >
+          <Badge color="secondary">
+            <ExitToAppIcon />
           </Badge>
         </IconButton>
       </Toolbar>

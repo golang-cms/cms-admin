@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 
-const Redirectoptions = () => {
+const RedirectOptions = () => {
   return (
     <Grid container>
       <Grid item xs>
@@ -18,4 +18,4 @@ const Redirectoptions = () => {
   );
 };
 
-export default Redirectoptions;
+export default RedirectOptions;
