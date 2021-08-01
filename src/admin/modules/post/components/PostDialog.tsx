@@ -28,7 +28,7 @@ import { FileModel, PostModel } from "../model/post";
 import MuiEditor from "./mui-rte/MuiEditor";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -146,6 +146,10 @@ const CreatePost = ({
   setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
   onClose: (action: Action) => void;
 }) => {
+  if (data) {
+    data.files = uploadedFiles;
+    console.log("============ change upload files", data);
+  }
   const [rows, error] = useCreatePost(data);
   console.log("Create post: ", rows, error);
 
