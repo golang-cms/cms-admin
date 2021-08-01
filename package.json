@@ -21,7 +21,10 @@
         "@types/node": "^12.20.7",
         "@types/react": "^17.0.3",
         "@types/react-dom": "^17.0.3",
+        "draft-js-export-html": "^1.4.1",
+        "js-beautify": "^1.14.0",
         "lodash": "^4.17.21",
+        "mui-rte": "^1.29.0",
         "react": "17.0.2",
         "react-dom": "17.0.2",
         "react-hook-form": "^7.8.4",
@@ -32,10 +35,12 @@
         "web-vitals": "^1.1.1"
     },
     "devDependencies": {
+        "@types/js-beautify": "^1.13.2",
         "@types/lodash": "^4.14.170",
         "@types/react": "17.0.3",
         "@types/react-dom": "17.0.3",
         "@types/react-router-dom": "^5.1.7",
+        "@types/uuid": "^8.3.1",
         "env-cmd": "^10.1.0",
         "gh-pages": "^3.1.0",
         "typescript": "^4.2.4"

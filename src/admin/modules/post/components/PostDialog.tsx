@@ -13,11 +13,19 @@ import TextField from "@material-ui/core/TextField";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
-import React, { useEffect, useState } from "react";
-import { Control, Controller, useForm, UseFormRegister } from "react-hook-form";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Control,
+  Controller,
+  useForm,
+  UseFormRegister,
+  UseFormSetValue,
+} from "react-hook-form";
+import useMoveFiles from "../../../../hooks/api/file/useMoveFiles";
 import useCreatePost from "../../../../hooks/api/post/useCreatePost";
 import useUpdatePost from "../../../../hooks/api/post/useUpdatePost";
-import { PostModel } from "../model/post";
+import { FileModel, PostModel } from "../model/post";
+import MuiEditor from "./mui-rte/MuiEditor";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
 
@@ -77,34 +85,48 @@ const Form = (props: PostDialogProps) => {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     control,
+    setValue,
     //  formState: { errors },
   } = useForm<PostModel>({
     shouldUnregister: false,
-    // defaultValues: {} as PostModel,
-    // defaultValues: props.data,
   });
+  const [uploadedFiles, setUploadedFiles] = useState<FileModel[]>(
+    props.data?.files ?? ([] as FileModel[])
+  );
   const [data, setData] = useState<PostModel>();
   const onSubmit = (data: PostModel) => {
     console.log(data);
     data = { ...props?.data, ...data };
     setData(data);
   };
-
-  console.log(watch("title"));
+  register("files");
+  // console.log(watch("title"));
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TopBar data={props.data} onClose={props.onClose} />
-        <DialogForm register={register} post={props?.data} control={control} />
+        <DialogForm
+          register={register}
+          post={props?.data}
+          control={control}
+          setValue={setValue}
+          setUploadedFiles={setUploadedFiles}
+        />
       </form>
       {data &&
         (props?.data ? (
           <UpdatePost data={data} setData={setData} onClose={props.onClose} />
         ) : (
-          <CreatePost data={data} setData={setData} onClose={props.onClose} />
+          <CreatePost
+            data={data}
+            setData={setData}
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+            onClose={props.onClose}
+          />
         ))}
     </div>
   );
@@ -113,21 +135,29 @@ const Form = (props: PostDialogProps) => {
 const CreatePost = ({
   data,
   setData,
+  uploadedFiles,
+  setUploadedFiles,
   onClose,
 }: {
   data?: PostModel;
-  setData: (data?: PostModel) => void;
+  setData: Dispatch<SetStateAction<PostModel | undefined>>;
+  uploadedFiles: FileModel[];
+  setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
   onClose: (action: Action) => void;
 }) => {
   const [rows, error] = useCreatePost(data);
   console.log("Create post: ", rows, error);
+
+  const [movedFiles, moveFileError] = useMoveFiles(uploadedFiles, rows);
+  console.log("Move files: ", movedFiles, moveFileError);
   useEffect(() => {
     if (rows) {
-      console.log("update post clean data");
+      console.log("Create post clean data");
       onClose(action({} as PostModel));
       setData(undefined);
+      setUploadedFiles([] as FileModel[]);
     }
-  }, [rows, setData, onClose]);
+  }, [rows, setData, onClose, setUploadedFiles]);
 
   return null;
 };
@@ -158,10 +188,14 @@ const DialogForm = ({
   register,
   post,
   control,
+  setValue,
+  setUploadedFiles,
 }: {
   register: UseFormRegister<PostModel>;
   post?: PostModel;
   control: Control<PostModel>;
+  setValue: UseFormSetValue<PostModel>;
+  setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
 }) => {
   return (
     <DialogContent>
@@ -189,14 +223,14 @@ const DialogForm = ({
         )}
         control={control}
         name="slug"
-        defaultValue={post?.slug}
+        defaultValue={post?.slug ?? ""}
       />
       <Controller
         render={({ field }) => (
           <TextField
             margin="dense"
-            id="content"
-            label="Content"
+            id="description"
+            label="Description"
             type="text"
             fullWidth
             multiline
@@ -205,8 +239,14 @@ const DialogForm = ({
           />
         )}
         control={control}
-        name="content"
-        defaultValue={post?.content}
+        name="description"
+        defaultValue={post?.description}
+      />
+      <MuiEditor
+        post={post}
+        control={control}
+        setValue={setValue}
+        setUploadedFiles={setUploadedFiles}
       />
     </DialogContent>
   );
