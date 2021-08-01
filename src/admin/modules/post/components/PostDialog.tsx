@@ -28,6 +28,7 @@ import { FileModel, PostModel } from "../model/post";
 import MuiEditor from "./mui-rte/MuiEditor";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
+import { v4 as uuid } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -247,6 +248,7 @@ const DialogForm = ({
         control={control}
         setValue={setValue}
         setUploadedFiles={setUploadedFiles}
+        fileId={post?.id?.toString() ?? uuid()}
       />
     </DialogContent>
   );

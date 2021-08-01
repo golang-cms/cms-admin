@@ -37,6 +37,7 @@ interface MuiEditorProps {
   control: Control<PostModel>;
   setValue: UseFormSetValue<PostModel>;
   setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
+  fileId: string;
 }
 
 const MuiEditor = (props: MuiEditorProps) => {
@@ -56,7 +57,7 @@ const MuiEditor = (props: MuiEditorProps) => {
     setUploadFile(file);
   };
 
-  const [uploadedFileResult, error] = useImageUpload(uploadFile, props.post);
+  const [uploadedFileResult, error] = useImageUpload(props.fileId, uploadFile, props.post);
   console.log(uploadedFileResult, error, uploadFile);
 
   useEffect(() => {
