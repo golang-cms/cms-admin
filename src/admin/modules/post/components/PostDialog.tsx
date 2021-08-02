@@ -29,6 +29,7 @@ import MuiEditor from "./mui-rte/MuiEditor";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
 import { v4 as uuid } from "uuid";
+import useDeleteFiles from "../../../../hooks/api/file/useDeleteFiles";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -108,7 +109,11 @@ const Form = (props: PostDialogProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TopBar data={props.data} onClose={props.onClose} />
+        <TopBar
+          data={props.data}
+          onClose={props.onClose}
+          uploadedFiles={uploadedFiles}
+        />
         <DialogForm
           register={register}
           post={props?.data}
@@ -261,18 +266,35 @@ const DialogForm = ({
 const TopBar = ({
   data,
   onClose,
+  uploadedFiles,
 }: {
   data?: PostModel;
   onClose: (action: Action) => void;
+  uploadedFiles: FileModel[];
 }) => {
   const classes = useStyles();
+  const [doDelete, setDoDelete] = useState<boolean>(false);
+  const [rows, error] = useDeleteFiles(doDelete, uploadedFiles);
+
+  useEffect(() => {
+    if (doDelete) {
+      console.log("do delete file", doDelete, uploadedFiles);
+      setDoDelete(false);
+      onClose(action(data));
+    }
+  }, [data, doDelete, onClose, uploadedFiles]);
+
+  console.log("delete file", error, rows);
   return (
     <AppBar className={classes.appBar}>
       <Toolbar>
         <IconButton
           edge="start"
           color="inherit"
-          onClick={() => onClose(action(data))}
+          onClick={() => {
+            console.log("closing dialog", uploadedFiles);
+            setDoDelete(true);
+          }}
           aria-label="close"
         >
           <CloseIcon />
