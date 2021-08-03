@@ -1,8 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Redirect } from "react-router-dom";
-import { AdminBasePath } from "../../../admin/moudles/Routes";
 import useGetToken from "../../../hooks/api/keycloak/useGetToken";
 import { TokenContext } from "../../../providers/token/TokenProvider";
 import EmailField from "./components/EmailField";
@@ -31,10 +29,9 @@ const Login = () => {
     setLogin(submitLogin);
   };
 
-  if (access) {
+  useEffect(() => {
     setToken(access);
-    return <Redirect to={AdminBasePath} />;
-  }
+  }, [access, setToken]);
 
   console.log(watch("username"));
 

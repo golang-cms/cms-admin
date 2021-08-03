@@ -7,8 +7,8 @@ import { TokenContext, TokenProvider } from "./providers/token/TokenProvider";
 //import GlobalStyles from "./GlobalStyles";
 import "./styles.css";
 import theme from "./theme";
-const AdminComponent = lazy(() => import("./admin/moudles/Main"));
-const LandingComponent = lazy(() => import("./landing/moudles/Main"));
+const AdminComponent = lazy(() => import("./admin/modules/Main"));
+const LandingComponent = lazy(() => import("./landing/modules/Main"));
 
 const App = () => {
   return (

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PostModel } from "../../../admin/moudles/post/model/post";
+import { PostModel } from "../../../admin/modules/post/model/post";
 import { IRequest } from "../../../providers/request/Request";
 import useApiResult from "../useApiResult";
 

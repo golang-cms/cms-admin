@@ -7,8 +7,17 @@ export interface PostModel {
     content: string;
     description: string;
     groups: GroupOmitPost[];
+    files: FileModel[];
     createAt?: Date;
     updateAt?: Date;
+}
+
+export interface FileModel {
+    id?: number;
+    title: string;
+    location: string;
+    displayUrl: string;
+    sha: string;
 }
 
 export type PostOmitGroup = Omit<PostModel, "groups">

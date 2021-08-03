@@ -10,6 +10,7 @@ const useApiResult = (request?: IRequest) => {
     useEffect(() => {
         let isCancelled = false;
         if (request === undefined) {
+            setResults(null);
             return;
         }
         requester(request).then(async (response: Response) => {
