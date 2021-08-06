@@ -66,9 +66,11 @@ const Editor = (props: EditorProps) => {
             onImageUploadBefore={handleImageUploadBefore}
             name={field.name}
             onChange={field.onChange}
+            onBlur={field.onBlur}
           />
         )}
         name="content"
+        defaultValue={props.post?.content}
         control={props.control}
       />
     </>
