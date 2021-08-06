@@ -21,15 +21,15 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
+import { v4 as uuid } from "uuid";
+import useDeleteFiles from "../../../../hooks/api/file/useDeleteFiles";
 import useMoveFiles from "../../../../hooks/api/file/useMoveFiles";
 import useCreatePost from "../../../../hooks/api/post/useCreatePost";
 import useUpdatePost from "../../../../hooks/api/post/useUpdatePost";
 import { FileModel, PostModel } from "../model/post";
-import MuiEditor from "./mui-rte/MuiEditor";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
-import { v4 as uuid } from "uuid";
-import useDeleteFiles from "../../../../hooks/api/file/useDeleteFiles";
+import Editor from "./sun-editor/Editor";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -206,62 +206,68 @@ const DialogForm = ({
   control: Control<PostModel>;
   setValue: UseFormSetValue<PostModel>;
   setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
-}) => {
-  return (
-    <DialogContent>
-      <TextField
-        autoFocus
-        margin="dense"
-        id="name"
-        label="Title"
-        type="title"
-        fullWidth
-        {...register("title")}
-        defaultValue={post?.title}
-      />
-      <MultiSelectTypeahead post={post} control={control} />
-      <Controller
-        render={({ field }) => (
-          <TextField
-            margin="dense"
-            id="slug"
-            label="Slug"
-            type="text"
-            fullWidth
-            {...field}
-          />
-        )}
-        control={control}
-        name="slug"
-        defaultValue={post?.slug ?? ""}
-      />
-      <Controller
-        render={({ field }) => (
-          <TextField
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            multiline
-            rows={8}
-            {...field}
-          />
-        )}
-        control={control}
-        name="description"
-        defaultValue={post?.description}
-      />
-      <MuiEditor
-        post={post}
-        control={control}
-        setValue={setValue}
-        setUploadedFiles={setUploadedFiles}
-        fileId={post?.id?.toString() ?? uuid()}
-      />
-    </DialogContent>
-  );
-};
+}) => (
+  <DialogContent>
+    <TextField
+      autoFocus
+      margin="dense"
+      id="name"
+      label="Title"
+      type="title"
+      fullWidth
+      {...register("title")}
+      defaultValue={post?.title}
+    />
+    <MultiSelectTypeahead post={post} control={control} />
+    <Controller
+      render={({ field }) => (
+        <TextField
+          margin="dense"
+          id="slug"
+          label="Slug"
+          type="text"
+          fullWidth
+          {...field}
+        />
+      )}
+      control={control}
+      name="slug"
+      defaultValue={post?.slug ?? ""}
+    />
+    <Controller
+      render={({ field }) => (
+        <TextField
+          margin="dense"
+          id="description"
+          label="Description"
+          type="text"
+          fullWidth
+          multiline
+          rows={8}
+          {...field}
+        />
+      )}
+      control={control}
+      name="description"
+      defaultValue={post?.description}
+    />
+    <Editor
+      post={post}
+      control={control}
+      setUploadedFiles={setUploadedFiles}
+      fileId={post?.id?.toString() ?? uuid()}
+    />
+    {/*
+        <MuiEditor
+          post={post}
+          control={control}
+          setValue={setValue}
+          setUploadedFiles={setUploadedFiles}
+          fileId={post?.id?.toString() ?? uuid()}
+        />
+        */}
+  </DialogContent>
+);
 
 const TopBar = ({
   data,
