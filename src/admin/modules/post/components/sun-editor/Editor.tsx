@@ -18,17 +18,19 @@ const options: SetOptions = {
   minHeight: "400",
   height: "300",
   buttonList: buttonList.complex,
+  attributesWhitelist: {
+    'video': "autoplay|muted|loop", 
+  },
   // mode: 'balloon',
 };
 
 const Editor = (props: EditorProps) => {
   const [uploadFile, setUploadFile] = useState<File>();
-  const [uploadedFileResult, error] = useImageUpload(
+  const [uploadedFileResult, uploadedFileError] = useImageUpload(
     props.fileId,
     uploadFile,
     props.post
   );
-  console.log(error);
   const localUploadHandlerFunc = useRef<Function>();
   const handleImageUploadBefore = useCallback(
     (files: Array<File>, info: object, uploadHandler: Function) => {
@@ -53,8 +55,13 @@ const Editor = (props: EditorProps) => {
         return files;
       });
     }
+    if (uploadedFileError && localUploadHandlerFunc.current) {
+      console.log("error upload file ", uploadedFileError);
+      localUploadHandlerFunc.current({ errorMessage: uploadedFileError });
+      localUploadHandlerFunc.current(undefined);
+    }
     setUploadFile(undefined);
-  }, [uploadedFileResult, props]);
+  }, [uploadedFileResult, uploadedFileError, props]);
 
   return (
     <>
@@ -64,6 +71,7 @@ const Editor = (props: EditorProps) => {
             defaultValue={props.post?.content}
             setOptions={options}
             onImageUploadBefore={handleImageUploadBefore}
+            onVideoUploadBefore={handleImageUploadBefore}
             name={field.name}
             onChange={field.onChange}
             onBlur={field.onBlur}
