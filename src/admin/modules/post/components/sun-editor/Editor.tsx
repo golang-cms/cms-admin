@@ -18,8 +18,11 @@ const options: SetOptions = {
   minHeight: "400",
   height: "300",
   buttonList: buttonList.complex,
+  videoTagAttrs: {
+    contenteditable: true,
+  },
   attributesWhitelist: {
-    'video': "autoplay|muted|loop", 
+    video: "autoplay|muted|loop|controls",
   },
   // mode: 'balloon',
 };
