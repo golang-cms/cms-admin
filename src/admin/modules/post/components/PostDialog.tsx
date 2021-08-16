@@ -1,3 +1,4 @@
+import { Grid, Switch } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -30,6 +31,7 @@ import { FileModel, PostModel } from "../model/post";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
 import Editor from "./sun-editor/Editor";
+import pretty from "pretty";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -98,6 +100,7 @@ const Form = (props: PostDialogProps) => {
     props.data?.files ?? ([] as FileModel[])
   );
   const [data, setData] = useState<PostModel>();
+  const [stay, setStay] = useState<boolean>(false);
   const onSubmit = (data: PostModel) => {
     console.log(data);
     data = { ...props?.data, ...data };
@@ -113,6 +116,7 @@ const Form = (props: PostDialogProps) => {
           data={props.data}
           onClose={props.onClose}
           uploadedFiles={uploadedFiles}
+          setStay={setStay}
         />
         <DialogForm
           register={register}
@@ -124,10 +128,11 @@ const Form = (props: PostDialogProps) => {
       </form>
       {data &&
         (props?.data ? (
-          <UpdatePost data={data} setData={setData} onClose={props.onClose} />
+          <UpdatePost data={data} stay={stay} setData={setData} onClose={props.onClose} />
         ) : (
           <CreatePost
             data={data}
+            stay={stay}
             setData={setData}
             uploadedFiles={uploadedFiles}
             setUploadedFiles={setUploadedFiles}
@@ -140,12 +145,14 @@ const Form = (props: PostDialogProps) => {
 
 const CreatePost = ({
   data,
+  stay,
   setData,
   uploadedFiles,
   setUploadedFiles,
   onClose,
 }: {
   data?: PostModel;
+  stay: boolean;
   setData: Dispatch<SetStateAction<PostModel | undefined>>;
   uploadedFiles: FileModel[];
   setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
@@ -163,21 +170,25 @@ const CreatePost = ({
   useEffect(() => {
     if (rows) {
       console.log("Create post clean data");
-      onClose(action({} as PostModel));
+      if (!stay) {
+        onClose(action({} as PostModel));
+      }
       setData(undefined);
       setUploadedFiles([] as FileModel[]);
     }
-  }, [rows, setData, onClose, setUploadedFiles]);
+  }, [rows, setData, onClose, setUploadedFiles, stay]);
 
   return null;
 };
 
 const UpdatePost = ({
   data,
+  stay,
   setData,
   onClose,
 }: {
   data?: PostModel;
+  stay: boolean;
   setData: (data?: PostModel) => void;
   onClose: (action: Action) => void;
 }) => {
@@ -186,13 +197,20 @@ const UpdatePost = ({
   useEffect(() => {
     if (rows && rows.id === data?.id) {
       console.log("update post clean data");
-      onClose(action(data));
+      if (!stay) {
+        onClose(action(data));
+      }
       setData(undefined);
     }
-  }, [data, rows, setData, onClose]);
+  }, [data, rows, setData, onClose, stay]);
 
   return null;
 };
+
+enum EditorType {
+  Html,
+  Wysiwyg,
+}
 
 const DialogForm = ({
   register,
@@ -206,58 +224,98 @@ const DialogForm = ({
   control: Control<PostModel>;
   setValue: UseFormSetValue<PostModel>;
   setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
-}) => (
-  <DialogContent>
-    <TextField
-      autoFocus
-      margin="dense"
-      id="name"
-      label="Title"
-      type="title"
-      fullWidth
-      {...register("title")}
-      defaultValue={post?.title}
-    />
-    <MultiSelectTypeahead post={post} control={control} />
-    <Controller
-      render={({ field }) => (
-        <TextField
-          margin="dense"
-          id="slug"
-          label="Slug"
-          type="text"
-          fullWidth
-          {...field}
+}) => {
+  const [editorType, setEditorType] = useState<EditorType>(EditorType.Html);
+  return (
+    <DialogContent>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="name"
+        label="Title"
+        type="title"
+        fullWidth
+        {...register("title")}
+        defaultValue={post?.title}
+      />
+      <MultiSelectTypeahead post={post} control={control} />
+      <Controller
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="slug"
+            label="Slug"
+            type="text"
+            fullWidth
+            {...field}
+          />
+        )}
+        control={control}
+        name="slug"
+        defaultValue={post?.slug ?? ""}
+      />
+      <Controller
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="description"
+            label="Description"
+            type="text"
+            fullWidth
+            multiline
+            rows={8}
+            {...field}
+          />
+        )}
+        control={control}
+        name="description"
+        defaultValue={post?.description}
+      />
+      <Typography component="div">
+        <Grid component="label" container alignItems="center" spacing={1}>
+          <Grid item>HTML</Grid>
+          <Grid item>
+            <Switch
+              name="editorType"
+              checked={editorType === EditorType.Wysiwyg}
+              onChange={() => {
+                editorType === EditorType.Wysiwyg
+                  ? setEditorType(EditorType.Html)
+                  : setEditorType(EditorType.Wysiwyg);
+              }}
+            />
+          </Grid>
+          <Grid item>Wysiwyg</Grid>
+        </Grid>
+      </Typography>
+      {editorType === EditorType.Wysiwyg ? (
+        <Editor
+          post={post}
+          control={control}
+          setUploadedFiles={setUploadedFiles}
+          fileId={post?.id?.toString() ?? uuid()}
+        />
+      ) : (
+        <Controller
+          render={({ field }) => (
+            <TextField
+              margin="dense"
+              id="content"
+              label="Content"
+              type="text"
+              fullWidth
+              multiline
+              rows={20}
+              {...field}
+            />
+          )}
+          control={control}
+          name="content"
+          // defaultValue={(new formatStringToHtml(post?.content ?? '')).format()}
+          defaultValue={pretty(post?.content)}
         />
       )}
-      control={control}
-      name="slug"
-      defaultValue={post?.slug ?? ""}
-    />
-    <Controller
-      render={({ field }) => (
-        <TextField
-          margin="dense"
-          id="description"
-          label="Description"
-          type="text"
-          fullWidth
-          multiline
-          rows={8}
-          {...field}
-        />
-      )}
-      control={control}
-      name="description"
-      defaultValue={post?.description}
-    />
-    <Editor
-      post={post}
-      control={control}
-      setUploadedFiles={setUploadedFiles}
-      fileId={post?.id?.toString() ?? uuid()}
-    />
-    {/*
+      {/*
         <MuiEditor
           post={post}
           control={control}
@@ -266,17 +324,20 @@ const DialogForm = ({
           fileId={post?.id?.toString() ?? uuid()}
         />
         */}
-  </DialogContent>
-);
+    </DialogContent>
+  );
+};
 
 const TopBar = ({
   data,
   onClose,
   uploadedFiles,
+  setStay,
 }: {
   data?: PostModel;
   onClose: (action: Action) => void;
   uploadedFiles: FileModel[];
+  setStay: Dispatch<SetStateAction<boolean>>;
 }) => {
   const classes = useStyles();
   const [doDelete, setDoDelete] = useState<boolean>(false);
@@ -308,7 +369,10 @@ const TopBar = ({
         <Typography variant="h6" className={classes.title}>
           Post
         </Typography>
-        <Button autoFocus color="inherit" type="submit">
+        <Button autoFocus color="inherit" type="submit" onClick={() => {setStay(true)}}>
+          save and continue edit
+        </Button>
+        <Button autoFocus color="inherit" type="submit" onClick={() => {setStay(false)}}>
           save
         </Button>
       </Toolbar>
