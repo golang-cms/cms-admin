@@ -4,6 +4,7 @@ import { Control, Controller } from "react-hook-form";
 import SunEditor, { buttonList } from "suneditor-react";
 import SetOptions from "suneditor-react/dist/types/SetOptions";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import SunEditorCore from "suneditor/src/lib/core";
 import useImageUpload from "../../../../../hooks/api/file/useImageUpload";
 import { FileModel, PostModel } from "../../model/post";
 
@@ -28,6 +29,30 @@ const options: SetOptions = {
 };
 
 const Editor = (props: EditorProps) => {
+  /**
+   * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
+   */
+  const editor = useRef<SunEditorCore>();
+
+  // The sunEditor parameter will be set to the core suneditor instance when this function is called
+  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
+    const { core } = sunEditor;
+    console.log("is this full page ", core.options.fullPage);
+
+    // @ts-ignore
+    core.plugins.video._setTagAttrs = (element) => {
+      const attrs = core.options?.videoTagAttrs;
+      if (!attrs) return;
+
+      for (const key in attrs) {
+        if (!core.util.hasOwn(attrs, key)) continue;
+        element.setAttribute(key, attrs[key]);
+      }
+    };
+
+    editor.current = sunEditor;
+  };
+
   const [uploadFile, setUploadFile] = useState<File>();
   const [uploadedFileResult, uploadedFileError] = useImageUpload(
     props.fileId,
@@ -71,6 +96,7 @@ const Editor = (props: EditorProps) => {
       <Controller
         render={({ field }) => (
           <SunEditor
+            getSunEditorInstance={getSunEditorInstance}
             defaultValue={props.post?.content}
             setOptions={options}
             onImageUploadBefore={handleImageUploadBefore}
