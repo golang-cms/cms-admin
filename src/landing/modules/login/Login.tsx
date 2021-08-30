@@ -43,7 +43,7 @@ const Login = () => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
-        <EmailField register={register} />
+        <EmailField register={register} path={"username"} />
         <PasswordField register={register} />
         <SignInButton />
         <RedirectOptions />

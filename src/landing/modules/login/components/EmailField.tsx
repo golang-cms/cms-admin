@@ -1,12 +1,13 @@
 import TextField from "@material-ui/core/TextField";
-import { UseFormRegister } from "react-hook-form";
-import { LoginModel } from "../model/Login";
+import { Path, UseFormRegister } from "react-hook-form";
 
-const EmailField = ({
-  register,
-}: {
-  register: UseFormRegister<LoginModel>;
-}) => {
+interface EmailProps<T> {
+    register: UseFormRegister<T>;
+    path: Path<T>;
+}
+
+
+const EmailField = <T extends unknown>(props: EmailProps<T>) => {
   return (
     <TextField
       variant="outlined"
@@ -17,7 +18,7 @@ const EmailField = ({
       label="Email Address"
       autoComplete="username"
       autoFocus
-      {...register("username")}
+      {...props.register(props.path)}
     />
   );
 };
