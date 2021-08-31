@@ -128,7 +128,12 @@ const Form = (props: PostDialogProps) => {
       </form>
       {data &&
         (props?.data ? (
-          <UpdatePost data={data} stay={stay} setData={setData} onClose={props.onClose} />
+          <UpdatePost
+            data={data}
+            stay={stay}
+            setData={setData}
+            onClose={props.onClose}
+          />
         ) : (
           <CreatePost
             data={data}
@@ -263,13 +268,30 @@ const DialogForm = ({
             type="text"
             fullWidth
             multiline
-            rows={8}
+            rows={1}
             {...field}
           />
         )}
         control={control}
         name="description"
         defaultValue={post?.description}
+      />
+      <Controller
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="head"
+            label="Head"
+            type="text"
+            fullWidth
+            multiline
+            rows={8}
+            {...field}
+          />
+        )}
+        control={control}
+        name="head"
+        defaultValue={post?.head}
       />
       <Typography component="div">
         <Grid component="label" container alignItems="center" spacing={1}>
@@ -324,6 +346,23 @@ const DialogForm = ({
           fileId={post?.id?.toString() ?? uuid()}
         />
         */}
+      <Controller
+        render={({ field }) => (
+          <TextField
+            margin="dense"
+            id="javascript"
+            label="Javascript"
+            type="text"
+            fullWidth
+            multiline
+            rows={20}
+            {...field}
+          />
+        )}
+        control={control}
+        name="javascript"
+        defaultValue={post?.javascript}
+      />
     </DialogContent>
   );
 };
@@ -369,10 +408,24 @@ const TopBar = ({
         <Typography variant="h6" className={classes.title}>
           Post
         </Typography>
-        <Button autoFocus color="inherit" type="submit" onClick={() => {setStay(true)}}>
+        <Button
+          autoFocus
+          color="inherit"
+          type="submit"
+          onClick={() => {
+            setStay(true);
+          }}
+        >
           save and continue edit
         </Button>
-        <Button autoFocus color="inherit" type="submit" onClick={() => {setStay(false)}}>
+        <Button
+          autoFocus
+          color="inherit"
+          type="submit"
+          onClick={() => {
+            setStay(false);
+          }}
+        >
           save
         </Button>
       </Toolbar>

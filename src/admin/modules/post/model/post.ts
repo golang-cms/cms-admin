@@ -4,6 +4,8 @@ export interface PostModel {
     id?: number;
     title: string;
     slug: string;
+    head: string;
+    javascript: string;
     content: string;
     description: string;
     groups: GroupOmitPost[];
