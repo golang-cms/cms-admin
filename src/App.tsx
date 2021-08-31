@@ -7,6 +7,7 @@ import { TokenContext, TokenProvider } from "./providers/token/TokenProvider";
 //import GlobalStyles from "./GlobalStyles";
 import "./styles.css";
 import theme from "./theme";
+import SignUp from "./landing/SignUp";
 const AdminComponent = lazy(() => import("./admin/modules/Main"));
 const LandingComponent = lazy(() => import("./landing/modules/Main"));
 
@@ -31,6 +32,7 @@ const Routes = () => {
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Fragment />}>
         <Switch>
+          <Route path="/signup" component={SignUp} />
           {token ? (
             <PrivateRoute
               path={"/"}
