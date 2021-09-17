@@ -57,7 +57,7 @@ const MuiEditor = (props: MuiEditorProps) => {
     setUploadFile(file);
   };
 
-  const [uploadedFileResult, error] = useImageUpload(props.fileId, uploadFile, props.post);
+  const [uploadedFileResult, error] = useImageUpload(props.fileId, uploadFile, props.post?.description);
   console.log(uploadedFileResult, error, uploadFile);
 
   useEffect(() => {
@@ -94,6 +94,7 @@ const MuiEditor = (props: MuiEditorProps) => {
         setHtmlContent={setHtmlContent}
         setJsonContent={setJsonContent}
       />
+      {/*
       <Controller
         name="content"
         control={props.control}
@@ -149,11 +150,14 @@ const MuiEditor = (props: MuiEditorProps) => {
           />
         )}
       />
+        */}
     </>
   );
 };
 
 const getJsonContent = (post?: PostModel) => {
+    return "";
+    /*
   if (!post?.content) {
     return null;
   }
@@ -162,6 +166,7 @@ const getJsonContent = (post?: PostModel) => {
   }
 
   return htmlToJson(post!.content);
+  */
 };
 
 export default MuiEditor;

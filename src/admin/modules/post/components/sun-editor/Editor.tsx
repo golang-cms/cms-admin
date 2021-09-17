@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldPath } from "react-hook-form";
 import SunEditor, { buttonList } from "suneditor-react";
 import SetOptions from "suneditor-react/dist/types/SetOptions";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
@@ -9,10 +9,12 @@ import useImageUpload from "../../../../../hooks/api/file/useImageUpload";
 import { FileModel, PostModel } from "../../model/post";
 
 interface EditorProps {
-  post?: PostModel;
+  content?: string;
+  fieldName: FieldPath<PostModel>;
   control: Control<PostModel>;
   fileId: string;
-  setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
+  setUploadedFiles: Dispatch<SetStateAction<Map<number, FileModel[]>>>;
+  languageId: number;
 }
 
 const options: SetOptions = {
@@ -57,7 +59,7 @@ const Editor = (props: EditorProps) => {
   const [uploadedFileResult, uploadedFileError] = useImageUpload(
     props.fileId,
     uploadFile,
-    props.post
+    props.content
   );
   const localUploadHandlerFunc = useRef<Function>();
   const handleImageUploadBefore = useCallback(
@@ -77,8 +79,16 @@ const Editor = (props: EditorProps) => {
         result: [{ url: uploadedFileResult.displayUrl }],
       });
       localUploadHandlerFunc.current(undefined);
-      props.setUploadedFiles((files: FileModel[]) => {
-        files.push(uploadedFileResult);
+      props.setUploadedFiles((files: Map<number, FileModel[]>) => {
+        let filesByLang = files.get(props.languageId);
+
+        if (filesByLang == null) {
+          filesByLang = [uploadedFileResult];
+        } else {
+          filesByLang?.push(uploadedFileResult);
+        }
+
+        files.set(props.languageId, filesByLang);
         console.log(files);
         return files;
       });
@@ -97,7 +107,7 @@ const Editor = (props: EditorProps) => {
         render={({ field }) => (
           <SunEditor
             getSunEditorInstance={getSunEditorInstance}
-            defaultValue={props.post?.content}
+            defaultValue={props.content}
             setOptions={options}
             onImageUploadBefore={handleImageUploadBefore}
             onVideoUploadBefore={handleImageUploadBefore}
@@ -106,8 +116,8 @@ const Editor = (props: EditorProps) => {
             onBlur={field.onBlur}
           />
         )}
-        name="content"
-        defaultValue={props.post?.content}
+        name={props.fieldName}
+        defaultValue={props.content}
         control={props.control}
       />
     </>
