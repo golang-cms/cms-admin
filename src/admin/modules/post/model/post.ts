@@ -4,11 +4,19 @@ export interface PostModel {
     id?: number;
     title: string;
     slug: string;
+    description: string;
+    groups: GroupOmitPost[];
+    translations: TranslationModel[];
+
+}
+
+export interface TranslationModel {
+    id: number;
+    languageId: number;
+    title: string;
     head: string;
     javascript: string;
     content: string;
-    description: string;
-    groups: GroupOmitPost[];
     files: FileModel[];
     createAt?: Date;
     updateAt?: Date;

@@ -1,13 +1,9 @@
-import { Grid, Switch } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import _ from "lodash";
 import Slide, { SlideProps } from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -22,16 +18,14 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import { v4 as uuid } from "uuid";
 import useDeleteFiles from "../../../../hooks/api/file/useDeleteFiles";
 import useMoveFiles from "../../../../hooks/api/file/useMoveFiles";
 import useCreatePost from "../../../../hooks/api/post/useCreatePost";
 import useUpdatePost from "../../../../hooks/api/post/useUpdatePost";
-import { FileModel, PostModel } from "../model/post";
+import { FileModel, PostModel, TranslationModel } from "../model/post";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
 import { Action } from "./Post";
-import Editor from "./sun-editor/Editor";
-import pretty from "pretty";
+import Translations, { isTranslationModified } from "./Translations";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -68,18 +62,6 @@ const PostDialog = (props: PostDialogProps) => {
           onClose={() => props.onClose(action(props.data))}
           data={props.data}
         />
-        <List>
-          <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText
-              primary="Default notification ringtone"
-              secondary="Tethys"
-            />
-          </ListItem>
-        </List>
       </Dialog>
     </div>
   );
@@ -96,17 +78,37 @@ const Form = (props: PostDialogProps) => {
   } = useForm<PostModel>({
     shouldUnregister: false,
   });
-  const [uploadedFiles, setUploadedFiles] = useState<FileModel[]>(
-    props.data?.files ?? ([] as FileModel[])
+  const [uploadedFiles, setUploadedFiles] = useState<Map<number, FileModel[]>>(
+    new Map(
+      props.data?.translations?.map((tran: TranslationModel) => [
+        tran.languageId,
+        tran.files,
+      ]) ?? []
+    )
   );
   const [data, setData] = useState<PostModel>();
   const [stay, setStay] = useState<boolean>(false);
   const onSubmit = (data: PostModel) => {
     console.log(data);
     data = { ...props?.data, ...data };
+    data.translations =
+      data.translations
+        .filter(
+          (tran: TranslationModel, index: number) =>
+            isTranslationModified(tran) ||
+            props?.data?.translations[index] != null
+        )
+        .map((tran: TranslationModel, index: number) => {
+          if (!isTranslationModified(tran)) {
+            return props!.data!.translations[index];
+          }
+          console.log(tran, data.translations[index]);
+          return { ...props?.data?.translations[index], ...tran };
+        }) ?? data.translations;
+    console.log("after prepend", data);
     setData(data);
   };
-  register("files");
+  // register("files");
   // console.log(watch("title"));
 
   return (
@@ -136,7 +138,7 @@ const Form = (props: PostDialogProps) => {
           />
         ) : (
           <CreatePost
-            data={data}
+            post={data}
             stay={stay}
             setData={setData}
             uploadedFiles={uploadedFiles}
@@ -149,28 +151,36 @@ const Form = (props: PostDialogProps) => {
 };
 
 const CreatePost = ({
-  data,
+  post,
   stay,
   setData,
   uploadedFiles,
   setUploadedFiles,
   onClose,
 }: {
-  data?: PostModel;
+  post?: PostModel;
   stay: boolean;
   setData: Dispatch<SetStateAction<PostModel | undefined>>;
-  uploadedFiles: FileModel[];
-  setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
+  uploadedFiles: Map<number, FileModel[]>;
+  setUploadedFiles: Dispatch<SetStateAction<Map<number, FileModel[]>>>;
   onClose: (action: Action) => void;
 }) => {
-  if (data) {
-    data.files = uploadedFiles;
-    console.log("============ change upload files", data);
+  if (post) {
+    if (!_.isEmpty(uploadedFiles)) {
+      console.log(post);
+      Array.from(uploadedFiles.values()).forEach((files, index) => {
+        console.log(files, index);
+        post.translations[index].files = files;
+      });
+    }
   }
-  const [rows, error] = useCreatePost(data);
+  const [rows, error] = useCreatePost(post);
   console.log("Create post: ", rows, error);
 
-  const [movedFiles, moveFileError] = useMoveFiles(uploadedFiles, rows);
+  const [movedFiles, moveFileError] = useMoveFiles(
+    toFlatFiles(uploadedFiles, [] as FileModel[]),
+    rows
+  );
   console.log("Move files: ", movedFiles, moveFileError);
   useEffect(() => {
     if (rows) {
@@ -179,7 +189,7 @@ const CreatePost = ({
         onClose(action({} as PostModel));
       }
       setData(undefined);
-      setUploadedFiles([] as FileModel[]);
+      setUploadedFiles({} as Map<number, FileModel[]>);
     }
   }, [rows, setData, onClose, setUploadedFiles, stay]);
 
@@ -212,11 +222,6 @@ const UpdatePost = ({
   return null;
 };
 
-enum EditorType {
-  Html,
-  Wysiwyg,
-}
-
 const DialogForm = ({
   register,
   post,
@@ -228,9 +233,8 @@ const DialogForm = ({
   post?: PostModel;
   control: Control<PostModel>;
   setValue: UseFormSetValue<PostModel>;
-  setUploadedFiles: Dispatch<SetStateAction<FileModel[]>>;
+  setUploadedFiles: Dispatch<SetStateAction<Map<number, FileModel[]>>>;
 }) => {
-  const [editorType, setEditorType] = useState<EditorType>(EditorType.Html);
   return (
     <DialogContent>
       <TextField
@@ -276,92 +280,13 @@ const DialogForm = ({
         name="description"
         defaultValue={post?.description}
       />
-      <Controller
-        render={({ field }) => (
-          <TextField
-            margin="dense"
-            id="head"
-            label="Head"
-            type="text"
-            fullWidth
-            multiline
-            rows={8}
-            {...field}
-          />
-        )}
+      <Translations
+        translations={post?.translations}
+        postId={post?.id}
         control={control}
-        name="head"
-        defaultValue={post?.head}
-      />
-      <Typography component="div">
-        <Grid component="label" container alignItems="center" spacing={1}>
-          <Grid item>HTML</Grid>
-          <Grid item>
-            <Switch
-              name="editorType"
-              checked={editorType === EditorType.Wysiwyg}
-              onChange={() => {
-                editorType === EditorType.Wysiwyg
-                  ? setEditorType(EditorType.Html)
-                  : setEditorType(EditorType.Wysiwyg);
-              }}
-            />
-          </Grid>
-          <Grid item>Wysiwyg</Grid>
-        </Grid>
-      </Typography>
-      {editorType === EditorType.Wysiwyg ? (
-        <Editor
-          post={post}
-          control={control}
-          setUploadedFiles={setUploadedFiles}
-          fileId={post?.id?.toString() ?? uuid()}
-        />
-      ) : (
-        <Controller
-          render={({ field }) => (
-            <TextField
-              margin="dense"
-              id="content"
-              label="Content"
-              type="text"
-              fullWidth
-              multiline
-              rows={20}
-              {...field}
-            />
-          )}
-          control={control}
-          name="content"
-          // defaultValue={(new formatStringToHtml(post?.content ?? '')).format()}
-          defaultValue={pretty(post?.content)}
-        />
-      )}
-      {/*
-        <MuiEditor
-          post={post}
-          control={control}
-          setValue={setValue}
-          setUploadedFiles={setUploadedFiles}
-          fileId={post?.id?.toString() ?? uuid()}
-        />
-        */}
-      <Controller
-        render={({ field }) => (
-          <TextField
-            margin="dense"
-            id="javascript"
-            label="Javascript"
-            type="text"
-            fullWidth
-            multiline
-            rows={20}
-            {...field}
-          />
-        )}
-        control={control}
-        name="javascript"
-        defaultValue={post?.javascript}
+        setUploadedFiles={setUploadedFiles}
+        register={register}
+        setValue={setValue}
       />
     </DialogContent>
   );
@@ -375,12 +300,16 @@ const TopBar = ({
 }: {
   data?: PostModel;
   onClose: (action: Action) => void;
-  uploadedFiles: FileModel[];
+  uploadedFiles: Map<number, FileModel[]>;
   setStay: Dispatch<SetStateAction<boolean>>;
 }) => {
   const classes = useStyles();
   const [doDelete, setDoDelete] = useState<boolean>(false);
-  const [rows, error] = useDeleteFiles(doDelete, uploadedFiles);
+  console.log(uploadedFiles);
+  const [rows, error] = useDeleteFiles(
+    doDelete,
+    toFlatFiles(uploadedFiles, undefined)
+  );
 
   useEffect(() => {
     if (doDelete) {
@@ -432,4 +361,12 @@ const TopBar = ({
     </AppBar>
   );
 };
+
+const toFlatFiles = (files: Map<number, FileModel[]>, defaultVal: any) =>
+  _.isEmpty(files)
+    ? defaultVal
+    : Array.from(files.values())
+        .flat()
+        .filter((val: FileModel) => val != null);
+
 export default PostDialog;
