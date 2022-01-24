@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { GroupModel } from "../../../admin/modules/group/model/group";
+import { GroupModel } from "../../../admin/modules/cms/group/model/group";
 import { IRequest } from "../../../providers/request/Request";
 import useApiResult from "../useApiResult";
 

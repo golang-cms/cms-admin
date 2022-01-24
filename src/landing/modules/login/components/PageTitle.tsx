@@ -1,33 +1,24 @@
-import Avatar from "@material-ui/core/Avatar";
-import { makeStyles } from "@material-ui/core/styles";
+import { Avatar, Box, Typography } from "@mui/material";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-}));
-
-const Pagetitle = () => {
-  const classes = useStyles();
+const PageTitle = () => {
   return (
-    <div className={classes.paper}>
-      <Avatar className={classes.avatar}>
+    <Box
+      sx={{
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-    </div>
+    </Box>
   );
 };
 
-export default Pagetitle;
+export default PageTitle;

@@ -1,15 +1,13 @@
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from 'clsx';
+import { makeStyles } from "@mui/styles";
+import clsx from "clsx";
 import React from "react";
-
+import { Grid, Paper } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    // padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,

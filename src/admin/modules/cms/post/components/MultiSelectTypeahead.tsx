@@ -1,11 +1,9 @@
-import { debounce } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Autocomplete, debounce, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import { Control } from "react-hook-form/dist/types";
-import useGetGroupsByTitle from "../../../../hooks/api/group/useGetGroupsByTitle";
+import useGetGroupsByTitle from "../../../../../hooks/api/group/useGetGroupsByTitle";
 import { GroupModel, GroupOmitPost } from "../../group/model/group";
 import { PostModel } from "../model/post";
 
@@ -45,7 +43,7 @@ const MultiSelectTypeahead = ({
             loading={loading}
             options={options}
             value={props.field.value as GroupModel[]}
-            getOptionSelected={(option: GroupModel, value: GroupOmitPost) =>
+            isOptionEqualToValue={(option: GroupModel, value: GroupOmitPost) =>
               option.id === value.id
             }
             getOptionLabel={(option: GroupModel) => option.title}

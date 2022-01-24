@@ -1,5 +1,5 @@
 import { Dispatch, useState } from "react";
-import { FileModel } from "../../admin/modules/post/model/post";
+import { FileModel } from "../../admin/modules/cms/post/model/post";
 
 export type UseFilesHook = [FileModel[], Dispatch<FileModel | undefined>];
 

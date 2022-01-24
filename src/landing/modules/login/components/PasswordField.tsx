@@ -1,6 +1,4 @@
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TextField from "@material-ui/core/TextField";
+import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { UseFormRegister } from "react-hook-form";
 import { LoginModel } from "../model/Login";
 

@@ -1,16 +1,10 @@
-import {
-  Popover,
-  Grid,
-  TextField,
-  IconButton,
-  Button,
-  makeStyles,
-} from "@material-ui/core";
-import { FunctionComponent, useState, useEffect } from "react";
-import DoneIcon from "@material-ui/icons/Done";
-import CloseIcon from "@material-ui/icons/Close";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
+import { makeStyles } from "@mui/styles";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import { Button, Grid, IconButton, Popover, TextField } from "@mui/material";
 import { TAsyncAtomicBlockResponse } from "mui-rte";
+import { FunctionComponent, useEffect, useState } from "react";
 
 interface IUploadImagePopoverProps {
   anchor: TAnchor;
@@ -28,7 +22,7 @@ type TUploadImageData = {
 
 type TAnchor = HTMLElement | null;
 
-const cardPopoverStyles = makeStyles({
+const cardPopoverStyles = makeStyles((theme) => ({
   root: {
     padding: 10,
     maxWidth: 350,
@@ -39,7 +33,7 @@ const cardPopoverStyles = makeStyles({
   input: {
     display: "none",
   },
-});
+}));
 
 const UploadImagePopover: FunctionComponent<IUploadImagePopoverProps> = (
   props
@@ -61,13 +55,15 @@ const UploadImagePopover: FunctionComponent<IUploadImagePopoverProps> = (
     });
   }, [props.anchor]);
 
+  const onExited = () => {
+    props.onSubmit(data, !state.isCancelled);
+  };
+
   return (
     <Popover
       anchorEl={state.anchor}
       open={state.anchor !== null}
-      onExited={() => {
-        props.onSubmit(data, !state.isCancelled);
-      }}
+      TransitionProps={{ onExited: onExited }}
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "right",
@@ -109,7 +105,7 @@ const UploadImagePopover: FunctionComponent<IUploadImagePopoverProps> = (
             </IconButton>
           </label>
         </Grid>
-        <Grid item container xs={12} justify="flex-end">
+        <Grid item container xs={12} justifyContent="flex-end">
           <Button
             onClick={() => {
               setState({
@@ -152,7 +148,6 @@ export const uploadImageServer = (file: any) => {
   });
 };
 export default UploadImagePopover;
-
 
 /*
 const uploadImage = (file: File) => {

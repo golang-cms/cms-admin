@@ -3,7 +3,7 @@ import { IRequest } from "../../providers/request/Request";
 import { useRequest } from "../../providers/request/RequestProvider";
 
 const useApiResult = (request?: IRequest) => {
-    const [results, setResults] = useState(null);
+    const [results, setResults] = useState<any | undefined>(null);
     const [error, setError] = useState<any>(null);
     const requester = useRequest();
 
@@ -17,14 +17,21 @@ const useApiResult = (request?: IRequest) => {
             if (isCancelled) {
                 return;
             }
+            if (response.status === 204) {
+                setResults("No content");
+                setError(null);
+                return;
+            }
             if (response.ok) {
-                setResults(await response.json());
+                console.log(response);
+                setResults(await response?.json());
                 setError(null);
             } else {
-                setError(await response.text());
+                setError(await response?.json());
             }
         }).catch((err) => {
-            setError(err.message);
+            console.log("I am err");
+            setError(err?.message ?? err);
         });
         return () => {
             isCancelled = true;

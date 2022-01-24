@@ -1,14 +1,7 @@
-import Button from "@material-ui/core/Button";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Button } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 const SignInButton = () => {
-  const classes = useStyles();
 
   return (
     <Button
@@ -16,7 +9,7 @@ const SignInButton = () => {
       fullWidth
       variant="contained"
       color="primary"
-      className={classes.submit}
+      sx={{ mt: 3, mb: 2 }}
     >
       Sign In
     </Button>

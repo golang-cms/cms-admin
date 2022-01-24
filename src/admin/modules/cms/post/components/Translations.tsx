@@ -1,13 +1,4 @@
-import {
-  Box,
-  Grid,
-  Paper,
-  Switch,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Switch, Paper, Tabs, Tab, Box, TextField, Typography, Grid } from "@mui/material";
 import pretty from "pretty";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -17,7 +8,7 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import useGetLanguages from "../../../../hooks/api/language/useGetLanguages";
+import useGetLanguages from "../../../../../hooks/api/language/useGetLanguages";
 import { LanguageModel } from "../model/language";
 import { FileModel, PostModel, TranslationModel } from "../model/post";
 import Editor from "./sun-editor/Editor";

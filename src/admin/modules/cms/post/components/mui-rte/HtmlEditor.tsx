@@ -1,4 +1,4 @@
-import { Collapse, Grow, TextField } from "@material-ui/core";
+import { Collapse, Grow, TextField } from "@mui/material";
 import { EditorState } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import htmlBeautify from "js-beautify";
@@ -25,7 +25,7 @@ const HtmlEditor = (props: HtmlEditorProps) => {
           type="text"
           fullWidth
           multiline
-          rowsMax={Infinity}
+          maxRows={Infinity}
           value={props.htmlContent || ""}
           onChange={(e) => {
             props.setHtmlContent(e.target.value);

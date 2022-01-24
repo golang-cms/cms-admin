@@ -1,4 +1,5 @@
-import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 import React, { Fragment, lazy, Suspense, useContext } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./component/PrivateRoute";
@@ -12,7 +13,7 @@ const LandingComponent = lazy(() => import("./landing/modules/Main"));
 
 const App = () => {
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <TokenProvider>
         <RequestProvider>
           <CssBaseline />
@@ -21,7 +22,7 @@ const App = () => {
           {/* <Pace color={theme.palette.primary.light} /> */}
         </RequestProvider>
       </TokenProvider>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 

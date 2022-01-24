@@ -1,4 +1,4 @@
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@mui/material";
 import { Path, UseFormRegister } from "react-hook-form";
 
 interface EmailProps<T> {

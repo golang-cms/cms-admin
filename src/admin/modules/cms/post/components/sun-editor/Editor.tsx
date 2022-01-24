@@ -5,7 +5,7 @@ import SunEditor, { buttonList } from "suneditor-react";
 import SetOptions from "suneditor-react/dist/types/SetOptions";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
-import useImageUpload from "../../../../../hooks/api/file/useImageUpload";
+import useImageUpload from "../../../../../../hooks/api/file/useImageUpload";
 import { FileModel, PostModel } from "../../model/post";
 
 interface EditorProps {

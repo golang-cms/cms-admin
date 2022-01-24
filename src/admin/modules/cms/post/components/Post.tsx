@@ -1,18 +1,18 @@
 import {
-  makeStyles,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+    Button,
+    Grid, Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from "@mui/material";
+import { makeStyles } from '@mui/styles';
 import _ from "lodash";
 import React from "react";
-import useGetPosts from "../../../../hooks/api/post/useGetPosts";
+import useGetPosts from "../../../../../hooks/api/post/useGetPosts";
+import { Action } from "../../../common/model/ActionEnum";
 import { PostModel } from "../model/post";
 import DeleteDialog from "./DeleteDialog";
 import PostDialog from "./PostDialog";
@@ -25,12 +25,6 @@ const useStyles = makeStyles({
     maxHeight: 440,
   },
 });
-
-export enum Action {
-  Delete,
-  Update,
-  Create,
-}
 
 const Post = () => {
   const [open, setOpen] = React.useState(false);
@@ -70,7 +64,7 @@ const Post = () => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container gap={3}>
       <Button
         variant="contained"
         color="primary"
@@ -181,7 +175,7 @@ const ActionButtons = ({
         Edit
       </Button>
       <Button
-        color="default"
+        color="warning"
         variant="contained"
         onClick={() => handleClickOpen(Action.Delete, row)}
       >

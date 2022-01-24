@@ -1,12 +1,24 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import Post from "./cms/post/components/Post";
 import Dashboard from "./dashboard/components/Dashboard";
-import Post from "./post/components/Post";
+import Reservation from "./rms/reservation/components/Reservation";
+import Resource from "./rms/resources/components/Resource";
 
 export const AdminBasePath = "/admin";
 export const routesDefinition = [
   { path: AdminBasePath, name: "Dashboard", component: Dashboard },
-  { path: AdminBasePath + "/post", name: "Post", component: Post },
+  { path: AdminBasePath + "/posts", name: "Post", component: Post },
+  {
+    path: AdminBasePath + "/reservations",
+    name: "Reservation",
+    component: Reservation,
+  },
+  {
+    path: AdminBasePath + "/resources",
+    name: "Resource",
+    component: Resource,
+  },
 ];
 
 const Routes = () => (

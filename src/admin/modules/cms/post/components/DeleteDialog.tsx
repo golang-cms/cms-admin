@@ -1,15 +1,15 @@
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@material-ui/core";
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import useDeletePost from "../../../../hooks/api/post/useDeletePost";
+import useDeletePost from "../../../../../hooks/api/post/useDeletePost";
+import { Action } from "../../../common/model/ActionEnum";
 import { PostModel } from "../model/post";
-import { Action } from "./Post";
 
 interface DeleteDialogProps {
   open: boolean;

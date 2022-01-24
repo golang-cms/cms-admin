@@ -1,4 +1,4 @@
-import { Select, Input, Chip, MenuItem } from "@material-ui/core";
+import { Chip, Input, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
 
 const MultiSelect = () => {
@@ -16,7 +16,7 @@ const MultiSelect = () => {
       ];
       const [displayValue, setDisplayValue] = useState<string[]>([]);
 
-      const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+      const handleChange = (event: SelectChangeEvent<string[]>, child: React.ReactNode) => {
         setDisplayValue(event.target.value as string[]);
       };
   return (

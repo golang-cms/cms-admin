@@ -1,19 +1,17 @@
-import { Typography, Badge } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import clsx from "clsx";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import MenuIcon from "@mui/icons-material/Menu";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Badge, IconButton, Toolbar, Typography } from "@mui/material";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { styled } from "@mui/material/styles";
 import React, { useContext } from "react";
-import { drawerWidth } from "../../Main";
-import { ToggleContext } from "../providers/ToggleProvider";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useLocation } from "react-router-dom";
-import { routesDefinition } from "../../Routes";
 import { TokenContext } from "../../../../providers/token/TokenProvider";
+import { drawerWidth } from "../../Main";
+import { routesDefinition } from "../../Routes";
+import { ToggleContext } from "../providers/ToggleProvider";
 
+/*
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -43,9 +41,32 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
+*/
+export interface AppBarProps extends MuiAppBarProps {
+    open?: boolean;
+  }
+  
+
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+  })<AppBarProps>(({ theme, open }) => ({
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
 
 const TopBar = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [toggle, setToggle] = useContext(ToggleContext);
   const [, , resetToken] = useContext(TokenContext);
   const handleDrawerOpen = () => {
@@ -57,20 +78,21 @@ const TopBar = () => {
   );
 
   return (
-    <AppBar
-      position="absolute"
-      className={clsx(classes.appBar, toggle && classes.appBarShift)}
-    >
-      <Toolbar className={classes.toolbar}>
+    <AppBar position="absolute" open={toggle}>
+      <Toolbar
+        sx={{
+          pr: "24px", // keep right padding when drawer closed
+        }}
+      >
         <IconButton
           edge="start"
           color="inherit"
           aria-label="open drawer"
           onClick={handleDrawerOpen}
-          className={clsx(
-            classes.menuButton,
-            toggle && classes.menuButtonHidden
-          )}
+          sx={{
+            marginRight: '36px',
+            ...(toggle && { display: 'none' }),
+          }} 
         >
           <MenuIcon />
         </IconButton>
@@ -79,7 +101,7 @@ const TopBar = () => {
           variant="h6"
           color="inherit"
           noWrap
-          className={classes.title}
+          sx={{ flexGrow: 1 }}
         >
           {currentRoute?.name}
         </Typography>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { FileModel } from "../../../admin/modules/post/model/post";
+import { FileModel } from "../../../admin/modules/cms/post/model/post";
 import { IRequest } from "../../../providers/request/Request";
 import useApiResult from "../useApiResult";
 

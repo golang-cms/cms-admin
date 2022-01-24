@@ -1,41 +1,33 @@
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+    AppBar,
+    Button,
+    Dialog,
+    DialogContent,
+    IconButton,
+    Slide,
+    SlideProps,
+    TextField,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import _ from "lodash";
-import Slide, { SlideProps } from "@material-ui/core/Slide";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
-  Control,
-  Controller,
-  useForm,
-  UseFormRegister,
-  UseFormSetValue,
+    Control,
+    Controller,
+    useForm,
+    UseFormRegister,
+    UseFormSetValue
 } from "react-hook-form";
-import useDeleteFiles from "../../../../hooks/api/file/useDeleteFiles";
-import useMoveFiles from "../../../../hooks/api/file/useMoveFiles";
-import useCreatePost from "../../../../hooks/api/post/useCreatePost";
-import useUpdatePost from "../../../../hooks/api/post/useUpdatePost";
+import useDeleteFiles from "../../../../../hooks/api/file/useDeleteFiles";
+import useMoveFiles from "../../../../../hooks/api/file/useMoveFiles";
+import useCreatePost from "../../../../../hooks/api/post/useCreatePost";
+import useUpdatePost from "../../../../../hooks/api/post/useUpdatePost";
+import { Action } from "../../../common/model/ActionEnum";
 import { FileModel, PostModel, TranslationModel } from "../model/post";
 import MultiSelectTypeahead from "./MultiSelectTypeahead";
-import { Action } from "./Post";
 import Translations, { isTranslationModified } from "./Translations";
-
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    position: "relative",
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-}));
 
 const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -303,7 +295,6 @@ const TopBar = ({
   uploadedFiles: Map<number, FileModel[]>;
   setStay: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const classes = useStyles();
   const [doDelete, setDoDelete] = useState<boolean>(false);
   console.log(uploadedFiles);
   const [rows, error] = useDeleteFiles(
@@ -321,7 +312,7 @@ const TopBar = ({
 
   console.log("delete file", error, rows);
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar position="relative">
       <Toolbar>
         <IconButton
           edge="start"
@@ -334,7 +325,7 @@ const TopBar = ({
         >
           <CloseIcon />
         </IconButton>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Post
         </Typography>
         <Button

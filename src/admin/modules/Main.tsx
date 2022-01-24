@@ -1,7 +1,6 @@
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container, Box } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { makeStyles } from '@material-ui/core/styles';
 import React from "react";
 import Copyright from "./common/components/CopyRight";
 import LeftMenu from "./common/components/LeftMenu";

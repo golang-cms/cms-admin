@@ -1,6 +1,5 @@
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { Box, Container } from "@mui/material";
+import CssBaseline from '@mui/material/CssBaseline';
 import React from "react";
 import Copyright from "../../admin/modules/common/components/CopyRight";
 import Login from "./login/Login";

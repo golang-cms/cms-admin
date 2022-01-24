@@ -1,13 +1,9 @@
-import BackupIcon from "@material-ui/icons/Backup";
-import WebIcon from "@material-ui/icons/Web";
-import { convertToRaw } from "draft-js";
-import MUIRichTextEditor, { TMUIRichTextEditorRef } from "mui-rte";
+import { TMUIRichTextEditorRef } from "mui-rte";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { Control, Controller, UseFormSetValue } from "react-hook-form";
-import useImageUpload from "../../../../../hooks/api/file/useImageUpload";
+import { Control, UseFormSetValue } from "react-hook-form";
+import useImageUpload from "../../../../../../hooks/api/file/useImageUpload";
 import { FileModel, PostModel } from "../../model/post";
-import { htmlToJson, isJson, rawToJson } from "./DraftJsUtil";
-import HtmlEditor, { htmlEditorHandler } from "./HtmlEditor";
+import HtmlEditor from "./HtmlEditor";
 import { MuiEditorType } from "./MuiEditorModel";
 import UploadImagePopover, { uploadImageServer } from "./UploadImagePopover";
 
