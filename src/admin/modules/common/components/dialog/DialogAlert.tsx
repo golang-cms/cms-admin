@@ -1,13 +1,15 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, AlertColor, Fade, IconButton } from "@mui/material";
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-interface AlertProps {
-  setError: Dispatch<any | undefined>;
+interface Props<ErrorDataType> {
+  setError: Dispatch<SetStateAction<ErrorDataType | undefined>>;
   error: any | undefined;
 }
 
-const AlertBox = (props: AlertProps) => {
+const AlertBox = <ErrorDataType extends unknown>(
+  props: Props<ErrorDataType>
+) => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (props.error) {

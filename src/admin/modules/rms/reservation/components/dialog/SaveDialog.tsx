@@ -1,11 +1,9 @@
 import { Dialog, Slide, SlideProps } from "@mui/material";
 import React from "react";
-import { Action } from "../../../common/model/ActionEnum";
-import { OnClose } from "../../../common/model/onClose";
-import { action } from "../../../common/utils/action";
-import { IdBasedModel } from "../../common/model/idBase";
-import { ReservationModel } from "../model/reservation";
-import FormDetail from "./dialog/FormDetail";
+import { OnClose } from "../../../../common/model/onClose";
+import { action } from "../../../../common/utils/action";
+import { ReservationModel } from "../../model/reservation";
+import FormDetail from "./FormDetail";
 
 interface DialogProps {
   open: boolean;
@@ -18,7 +16,7 @@ const Transition = React.forwardRef<unknown, SlideProps>((props, ref) => {
 });
 
 
-const ReservationDialog = (props: DialogProps) => {
+const SaveDialog = (props: DialogProps) => {
   return (
     <Dialog
       // keepMounted
@@ -31,4 +29,4 @@ const ReservationDialog = (props: DialogProps) => {
   );
 };
 
-export default ReservationDialog;
+export default SaveDialog;

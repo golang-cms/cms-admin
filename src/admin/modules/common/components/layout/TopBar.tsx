@@ -6,10 +6,10 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from "@mui/material/styles";
 import React, { useContext } from "react";
 import { useLocation } from "react-router-dom";
-import { TokenContext } from "../../../../providers/token/TokenProvider";
-import { drawerWidth } from "../../Main";
-import { routesDefinition } from "../../Routes";
-import { ToggleContext } from "../providers/ToggleProvider";
+import { TokenContext } from "../../../../../providers/token/TokenProvider";
+import { drawerWidth } from "../../../Main";
+import { routesDefinition } from "../../../Routes";
+import { ToggleContext } from "../../providers/ToggleProvider";
 
 /*
 const useStyles = makeStyles((theme) => ({

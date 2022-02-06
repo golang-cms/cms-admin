@@ -2,9 +2,9 @@ import { Container, Box } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { makeStyles } from '@material-ui/core/styles';
 import React from "react";
-import Copyright from "./common/components/CopyRight";
-import LeftMenu from "./common/components/LeftMenu";
-import TopBar from "./common/components/TopBar";
+import Copyright from "./common/components/layout/CopyRight";
+import LeftMenu from "./common/components/layout/LeftMenu";
+import TopBar from "./common/components/layout/TopBar";
 import { ToggleProvider } from "./common/providers/ToggleProvider";
 import Routes from "./Routes";
 

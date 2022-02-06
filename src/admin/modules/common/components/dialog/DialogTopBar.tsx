@@ -1,9 +1,9 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { OnClose } from "../../../common/model/onClose";
-import { action } from "../../../common/utils/action";
-import { IdBasedModel } from "../model/idBase";
+import { OnClose } from "../../model/onClose";
+import { action } from "../../utils/action";
+import { IdBasedModel } from "../../model/idBase";
 
 interface Props<DataType extends IdBasedModel<IdType>, IdType> {
   headTitle: string;
@@ -18,7 +18,7 @@ const DialogTopBar = <
 >(
   props: Props<DataType, IdType>
 ) => {
-  const { headTitle, data, onClose, setDeleteId: setDeleteId } = props;
+  const { headTitle, data, onClose, setDeleteId } = props;
   return (
     <AppBar position="relative">
       <Toolbar>

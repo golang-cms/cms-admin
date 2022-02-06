@@ -24,9 +24,9 @@ import MuiDrawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import React, { ReactElement, useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { drawerWidth } from "../../Main";
-import { AdminBasePath } from "../../Routes";
-import { ToggleContext } from "../providers/ToggleProvider";
+import { drawerWidth } from "../../../Main";
+import { AdminBasePath } from "../../../Routes";
+import { ToggleContext } from "../../providers/ToggleProvider";
 
 const menuLists = [
   {
@@ -134,18 +134,24 @@ const LeftMenu = () => {
 const MenuListItems = () => {
   return (
     <List>
-      {menuLists.map((item: MenuList) =>
-        isSingleListItem(item) ? (
-          <SingleListItem {...item} />
-        ) : (
-          <GroupListItem {...item} />
-        )
-      )}
+      {menuLists
+        .map((item: MenuList) => addKeyToItem(item))
+        .map((item: MenuList) =>
+          isSingleListItem(item) ? (
+            <SingleListItem {...item} />
+          ) : (
+            <GroupListItem {...item} />
+          )
+        )}
     </List>
   );
 };
 
-type MenuList = SingleListItemProps | GroupListItemProps;
+const addKeyToItem = (item: MenuList): MenuList =>
+  isSingleListItem(item)
+    ? { ...item, key: item.name }
+    : { ...item, key: item.groupName };
+
 const isSingleListItem = (list: MenuList): list is SingleListItemProps =>
   (list as GroupListItemProps).listItems === undefined;
 interface GroupListItemProps {
@@ -153,13 +159,16 @@ interface GroupListItemProps {
   groupDetails: string;
   groupIcon?: ReactElement;
   listItems: SingleListItemProps[];
+  key?: string;
 }
 
 interface SingleListItemProps {
   name: string;
   link: string;
   icon: ReactElement;
+  key?: string;
 }
+type MenuList = SingleListItemProps | GroupListItemProps;
 
 const GroupListItem = (props: GroupListItemProps) => {
   const { groupName, groupDetails, groupIcon, listItems } = props;
@@ -221,9 +230,12 @@ const GroupListItem = (props: GroupListItemProps) => {
         />
       </ListItemButton>
       {open &&
-        listItems.map((item: SingleListItemProps) => (
-          <SingleListItem {...item} />
-        ))}
+        listItems
+          .map(
+            (item: SingleListItemProps) =>
+              addKeyToItem(item) as SingleListItemProps
+          )
+          .map((item: SingleListItemProps) => <SingleListItem {...item} />)}
     </>
   );
 };
@@ -231,7 +243,7 @@ const GroupListItem = (props: GroupListItemProps) => {
 const SingleListItem = (props: SingleListItemProps) => {
   const { name, link, icon } = props;
   return (
-    <ListItem button component={Link} to={link}>
+    <ListItem key={name} button component={Link} to={link}>
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={name} />
     </ListItem>

@@ -5,16 +5,21 @@ import FullCalendar, {
 } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
-import { styled } from "@mui/system";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import AdapterMoment from "@mui/lab/AdapterMoment";
 import { Grid } from "@mui/material";
+import { styled } from "@mui/system";
+import moment from "moment";
 import { Dispatch, SetStateAction, useState } from "react";
 import useGetReservations from "../../../../../hooks/api/rms/reservation/useGetReservations";
-import { Action } from "../../../common/model/ActionEnum";
+import FormDialog from "../../../common/components/dialog/FormDialog";
+import { onClose } from "../../../common/restful/dialog";
 import { formatter, ReservationModel } from "../model/reservation";
-import ReservationDialog from "./ReservationDialog";
-import moment from "moment";
+import { formFields } from "./formFields";
+import { LocalizationProvider } from "@mui/lab";
+import { ResourceModel } from "../../resources/model/resource";
+import { ClientModel } from "../../client/model/client";
 
 const businessHours = {
   // days of week. an array of zero-based day of week integers (0=Sunday)
@@ -48,24 +53,48 @@ const FullCalendarStyled = styled("div")(
     }
   `
 );
+const API_URL = `${process.env.REACT_APP_RESERVATION_API_BASE_URL}/reservations`;
+const HEAD_TITLE = `Reservations`;
 
 const Reservation = () => {
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState<ReservationModel>();
-  const [saved, setSaved] = useState(false);
-  const [apiResponse, error] = useGetReservations(saved);
+  const [openSave, setOpenSave] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [dialogData, setDialogData] = useState<ReservationModel>();
+  const [refetchToggle, setRefetchToggle] = useState(false);
+  const [apiResponse, error] = useGetReservations(refetchToggle);
   const existReservations = apiResponseToReservations(apiResponse);
-  console.log(existReservations, error);
+  console.log(existReservations, error, openDelete);
 
   return (
     <Grid>
-      <ReservationDialog
+      {/*
+      <SaveDialog
         open={open}
         onClose={(action: Action) =>
-          handleClose(action, saved, setOpen, setSaved, setData)
+          handleClose(action, refetchToggle, setOpen, setRefetchToggle, setDialogData)
         }
-        data={data}
+        data={dialogData}
       />
+    */}
+
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <FormDialog
+          fullscreen={false}
+          headTitle={HEAD_TITLE}
+          apiUrl={API_URL}
+          open={openSave}
+          onClose={onClose(
+            setOpenSave,
+            setOpenDelete,
+            refetchToggle,
+            setRefetchToggle,
+            setDialogData
+          )}
+          formFields={formFields}
+          data={dialogData}
+          dataTransform={dataTransform}
+        />
+      </LocalizationProvider>
       <FullCalendarStyled>
         <FullCalendar
           plugins={[
@@ -89,16 +118,31 @@ const Reservation = () => {
           weekNumbers={true}
           events={existReservations}
           select={(arg: DateSelectArg) =>
-            addEventByClick(arg, setData, setOpen)
+            addEventByClick(arg, setDialogData, setOpenSave)
           }
           eventClick={(eventClick: EventClickArg) =>
-            modifyEventByClick(eventClick, existReservations, setData, setOpen)
+            modifyEventByClick(
+              eventClick,
+              existReservations,
+              setDialogData,
+              setOpenSave
+            )
           }
           eventDrop={(eventClick: EventDropArg) =>
-            modifyEventByDrag(eventClick, existReservations, setData, setOpen)
+            modifyEventByDrag(
+              eventClick,
+              existReservations,
+              setDialogData,
+              setOpenSave
+            )
           }
           eventResize={(eventClick) =>
-            modifyEventByDrag(eventClick, existReservations, setData, setOpen)
+            modifyEventByDrag(
+              eventClick,
+              existReservations,
+              setDialogData,
+              setOpenSave
+            )
           }
           eventAdd={() => {
             console.log("add event");
@@ -113,6 +157,23 @@ const Reservation = () => {
   );
 };
 
+const dataTransform = (submitReservation: any, id?: number): ReservationModel =>
+  ({
+    ...submitReservation,
+    id: id,
+    start: moment.utc(submitReservation.start).format(formatter),
+    end: moment.utc(submitReservation.end).format(formatter),
+    status: 1,
+    resource: { id: 1, title: "" } as ResourceModel,
+    client: {
+      id: 1,
+      email: "info@smartcodee.com",
+      firstName: "smart",
+      lastName: "codee",
+    } as ClientModel,
+  } as ReservationModel);
+
+/*
 const handleClose = (
   action: Action,
   saved: boolean,
@@ -134,6 +195,7 @@ const handleClose = (
   setData(undefined);
   setSaved(!saved);
 };
+*/
 
 const addEventByClick = (
   arg: DateSelectArg,

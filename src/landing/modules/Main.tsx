@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import CssBaseline from '@mui/material/CssBaseline';
 import React from "react";
-import Copyright from "../../admin/modules/common/components/CopyRight";
+import Copyright from "../../admin/modules/common/components/layout/CopyRight";
 import Login from "./login/Login";
 
 const Main = () => {

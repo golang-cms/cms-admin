@@ -8,22 +8,24 @@ import useDeleteReservation from "../../../../../../hooks/api/rms/reservation/us
 import useUpdateReservation from "../../../../../../hooks/api/rms/reservation/useUpdateReservation";
 import { Action } from "../../../../common/model/ActionEnum";
 import {
-  ClientModel,
   formatter,
   ReservationModel,
 } from "../../model/reservation";
-import DialogTopBar from "../../../common/components/DialogTopBar";
+import DialogTopBar from "../../../../common/components/dialog/DialogTopBar";
 import FormFields from "./FormField";
-import AlertBox from "./Alert";
+import AlertBox from "../../../../common/components/dialog/DialogAlert";
 import { ResourceModel } from "../../../resources/model/resource";
 import { OnClose } from "../../../../common/model/onClose";
 import { action } from "../../../../common/utils/action";
+import { formOnSubmit } from "../../../../common/restful/form";
+import { ClientModel } from "../../../client/model/client";
 
 interface FormDetailProps {
   reservation?: ReservationModel;
   onClose: OnClose;
 }
 
+/*
 const onSubmit = (
   submitReservation: ReservationModel,
   setCreateReservation: Dispatch<ReservationModel>,
@@ -59,6 +61,24 @@ const onSubmit = (
       break;
   }
 };
+*/
+
+const dataTransform = (submitReservation: any, id?: number): ReservationModel =>
+  ({
+    ...submitReservation,
+    id: id,
+    start: moment.utc(submitReservation.start).format(formatter),
+    end: moment.utc(submitReservation.end).format(formatter),
+    status: 1,
+    resource: { id: 1, title: "" } as ResourceModel,
+    client: {
+      id: 1,
+      email: "info@smartcodee.com",
+      firstName: "smart",
+      lastName: "codee",
+    } as ClientModel,
+  } as ReservationModel);
+
 const FormDetail = (props: FormDetailProps) => {
   const { onClose } = props;
   const { register, handleSubmit, control } = useForm<any>({
@@ -100,12 +120,13 @@ const FormDetail = (props: FormDetailProps) => {
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <form
           onSubmit={handleSubmit((submitData) =>
-            onSubmit(
+            formOnSubmit(
               submitData,
               setCreate,
               setUpdate,
               currAction,
-              props?.reservation?.id
+              props?.reservation?.id,
+              dataTransform
             )
           )}
         >
@@ -142,7 +163,7 @@ const cleanApiData = <T extends unknown>(
 const setErrorFromApi = (
   createErr: any,
   updateErr: any,
-  setError: React.Dispatch<any>
+  setError: Dispatch<SetStateAction<any>>
 ) => {
   console.log("set error", createErr, updateErr);
   createErr
